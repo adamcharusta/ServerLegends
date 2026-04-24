@@ -1,0 +1,29 @@
+{
+  "name": "server-legends",
+  "version": "1.0.0",
+  "description": "Discord collectible card bot",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "deploy": "node src/deploy-commands.js",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write \"src/**/*.js\" \"locales/**/*.json\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.0",
+    "eslint": "^9.11.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^2.3.0",
+    "canvas": "^2.11.2",
+    "discord-api-types": "^0.37.97",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "i18next": "^23.11.5",
+    "i18next-fs-backend": "^2.3.2",
+    "pg": "^8.11.5"
+  }
+}

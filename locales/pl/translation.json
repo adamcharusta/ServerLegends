@@ -1,0 +1,76 @@
+{
+  "open": {
+    "no_config": "Administrator musi najpierw skonfigurować bota przez `/setup`.",
+    "no_packs": "Nie masz dostępnych paczek. Następne otrzymasz {{time}}.",
+    "no_members": "Brak kwalifikujących się członków do wylosowania.",
+    "success": "Wylosowałeś kartę **{{username}}** — {{tierName}}! Paczek pozostało: **{{packsLeft}}**"
+  },
+  "inventory": {
+    "empty": "Twoje inventory jest puste. Otwórz paczkę przez `/open`!",
+    "title": "Inventory — {{username}}",
+    "line": "#{{id}} **{{username}}** — {{tierName}} (T{{tier}})",
+    "footer": "Strona {{page}}/{{totalPages}} · Łącznie: {{total}} kart"
+  },
+  "balance": {
+    "title": "Portfel — {{username}}",
+    "field_coins": "Monety",
+    "field_packs": "Paczki",
+    "field_next": "Następna paczka",
+    "now": "Teraz"
+  },
+  "sell": {
+    "not_found": "Nie znaleziono karty #{{id}} w twoim inventory.",
+    "listed": "Ta karta jest wystawiona na giełdzie. Wycofaj ją najpierw przez `/market cancel`.",
+    "success": "Sprzedałeś kartę **#{{id}}** ({{tierName}}) za 🪙 **{{value}}** monet!"
+  },
+  "trade": {
+    "self_or_bot": "Nie możesz handlować sam ze sobą ani z botami.",
+    "no_your_card": "Nie posiadasz karty #{{id}}.",
+    "no_their_card": "{{username}} nie posiada karty #{{id}}.",
+    "embed_title": "Propozycja wymiany",
+    "embed_desc": "{{user1}} proponuje wymianę z {{user2}}",
+    "field_offers": "Oferuje — {{username}}",
+    "field_wants": "Chce — {{username}}",
+    "card_line": "Karta #{{id}} · <@{{cardUserId}}> · {{tierName}}",
+    "footer": "Masz 60 sekund na odpowiedź.",
+    "declined": "{{username}} odrzucił wymianę.",
+    "unavailable": "Jedna z kart nie jest już dostępna. Wymiana anulowana.",
+    "success": "Wymiana zakończona! {{user1}} i {{user2}} wymienili karty."
+  },
+  "market": {
+    "list_not_found": "Nie znaleziono karty w twoim inventory.",
+    "list_already": "Ta karta jest już wystawiona na giełdzie.",
+    "list_success": "Karta #{{cardId}} wystawiona za 🪙 **{{price}}** (oferta #{{listingId}}).",
+    "buy_not_found": "Oferta nie istnieje lub została już sprzedana.",
+    "buy_own": "Nie możesz kupić własnej oferty.",
+    "buy_no_funds": "Za mało monet. Potrzebujesz 🪙 **{{price}}**.",
+    "buy_success": "Kupiłeś kartę <@{{cardUserId}}> ({{tierName}}) za 🪙 **{{price}}**!",
+    "view_empty": "Brak ofert na giełdzie.",
+    "view_title": "Giełda kart",
+    "view_line": "#{{id}} <@{{cardUserId}}> — {{tierName}} · 🪙 **{{price}}** · sprzedaje <@{{sellerId}}>",
+    "view_footer": "Strona {{page}}/{{totalPages}} · Łącznie: {{total}} ofert",
+    "cancel_not_found": "Nie znaleziono twojej oferty o tym ID.",
+    "cancel_success": "Oferta #{{id}} została wycofana."
+  },
+  "cards": {
+    "not_found": "Nie znaleziono karty o tym ID na tym serwerze.",
+    "user_error": "Nie można pobrać danych użytkownika tej karty.",
+    "info": "Karta #{{id}} · {{tierName}} · Właściciel: <@{{ownerId}}>"
+  },
+  "top": {
+    "balance_title": "Top 10 — Monety",
+    "cards_title": "Top 10 — Liczba kart",
+    "rarity_title": "Top 10 — Najwyższy Tier",
+    "no_data": "Brak danych.",
+    "balance_line": "<@{{userId}}> — 🪙 {{balance}}",
+    "cards_line": "<@{{ownerId}}> — 📦 {{count}} kart",
+    "rarity_line": "<@{{ownerId}}> — ✨ Tier {{tier}}"
+  },
+  "setup": {
+    "success": "Konfiguracja zapisana!\n📍 Kanał: {{channel}}\n⏰ Interwał: **{{interval}}h**\n📦 Paczek na cykl: **{{packs}}**",
+    "excluded_role": "\n🚫 Wykluczona rola: {{role}}"
+  },
+  "errors": {
+    "generic": "Wystąpił błąd podczas wykonywania komendy."
+  }
+}

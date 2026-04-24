@@ -1,0 +1,76 @@
+{
+  "open": {
+    "no_config": "An administrator must first configure the bot using `/setup`.",
+    "no_packs": "You have no packs available. Next ones arrive {{time}}.",
+    "no_members": "There are no eligible members to draw from.",
+    "success": "You drew **{{username}}**'s card — {{tierName}}! Packs remaining: **{{packsLeft}}**"
+  },
+  "inventory": {
+    "empty": "Your inventory is empty. Open a pack with `/open`!",
+    "title": "Inventory — {{username}}",
+    "line": "#{{id}} **{{username}}** — {{tierName}} (T{{tier}})",
+    "footer": "Page {{page}}/{{totalPages}} · Total: {{total}} cards"
+  },
+  "balance": {
+    "title": "Wallet — {{username}}",
+    "field_coins": "Coins",
+    "field_packs": "Packs",
+    "field_next": "Next pack",
+    "now": "Now"
+  },
+  "sell": {
+    "not_found": "Card #{{id}} was not found in your inventory.",
+    "listed": "This card is listed on the market. Remove it first with `/market cancel`.",
+    "success": "You sold card **#{{id}}** ({{tierName}}) for 🪙 **{{value}}** coins!"
+  },
+  "trade": {
+    "self_or_bot": "You cannot trade with yourself or bots.",
+    "no_your_card": "You do not own card #{{id}}.",
+    "no_their_card": "{{username}} does not own card #{{id}}.",
+    "embed_title": "Trade Offer",
+    "embed_desc": "{{user1}} proposes a trade with {{user2}}",
+    "field_offers": "Offers — {{username}}",
+    "field_wants": "Wants — {{username}}",
+    "card_line": "Card #{{id}} · <@{{cardUserId}}> · {{tierName}}",
+    "footer": "You have 60 seconds to respond.",
+    "declined": "{{username}} declined the trade.",
+    "unavailable": "One of the cards is no longer available. Trade cancelled.",
+    "success": "Trade complete! {{user1}} and {{user2}} exchanged cards."
+  },
+  "market": {
+    "list_not_found": "Card not found in your inventory.",
+    "list_already": "This card is already listed on the market.",
+    "list_success": "Card #{{cardId}} listed for 🪙 **{{price}}** (offer #{{listingId}}).",
+    "buy_not_found": "This offer does not exist or has already been sold.",
+    "buy_own": "You cannot buy your own listing.",
+    "buy_no_funds": "Not enough coins. You need 🪙 **{{price}}**.",
+    "buy_success": "You bought <@{{cardUserId}}>'s card ({{tierName}}) for 🪙 **{{price}}**!",
+    "view_empty": "There are no listings on the market.",
+    "view_title": "Card Market",
+    "view_line": "#{{id}} <@{{cardUserId}}> — {{tierName}} · 🪙 **{{price}}** · by <@{{sellerId}}>",
+    "view_footer": "Page {{page}}/{{totalPages}} · Total: {{total}} listings",
+    "cancel_not_found": "No listing with that ID was found for you.",
+    "cancel_success": "Listing #{{id}} has been removed."
+  },
+  "cards": {
+    "not_found": "No card with that ID was found on this server.",
+    "user_error": "Could not fetch user data for this card.",
+    "info": "Card #{{id}} · {{tierName}} · Owner: <@{{ownerId}}>"
+  },
+  "top": {
+    "balance_title": "Top 10 — Coins",
+    "cards_title": "Top 10 — Card Count",
+    "rarity_title": "Top 10 — Highest Tier",
+    "no_data": "No data yet.",
+    "balance_line": "<@{{userId}}> — 🪙 {{balance}}",
+    "cards_line": "<@{{ownerId}}> — 📦 {{count}} cards",
+    "rarity_line": "<@{{ownerId}}> — ✨ Tier {{tier}}"
+  },
+  "setup": {
+    "success": "Configuration saved!\n📍 Channel: {{channel}}\n⏰ Interval: **{{interval}}h**\n📦 Packs per cycle: **{{packs}}**",
+    "excluded_role": "\n🚫 Excluded role: {{role}}"
+  },
+  "errors": {
+    "generic": "An error occurred while executing this command."
+  }
+}
