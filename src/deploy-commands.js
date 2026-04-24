@@ -3,10 +3,12 @@ const { REST, Routes } = require('discord.js');
 const fs   = require('fs');
 const path = require('path');
 
+const isDev = process.env.NODE_ENV === 'development';
 const commands = [];
 
 for (const file of fs.readdirSync(path.join(__dirname, 'commands')).filter(f => f.endsWith('.js'))) {
   const cmd = require(path.join(__dirname, 'commands', file));
+  if (cmd.devOnly && !isDev) continue;
   commands.push(cmd.data.toJSON());
 }
 

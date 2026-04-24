@@ -1,6 +1,7 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const pool = require('../db/pool');
 const { getT } = require('../services/i18n');
+const { requireAdmin } = require('../utils/permissions');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -35,6 +36,8 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    if (!await requireAdmin(interaction)) return;
+
     const t            = getT(interaction.locale);
     const channel      = interaction.options.getChannel('channel');
     const interval     = interaction.options.getInteger('interval');
@@ -55,6 +58,6 @@ module.exports = {
     let content = t('setup.success', { channel, interval, packs });
     if (excludedRole) content += t('setup.excluded_role', { role: excludedRole });
 
-    await interaction.reply({ content, ephemeral: true });
+    await interaction.reply({ content, flags: MessageFlags.Ephemeral });
   },
 };

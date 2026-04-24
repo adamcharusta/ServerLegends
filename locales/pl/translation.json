@@ -1,76 +1,117 @@
 {
   "open": {
-    "no_config": "Administrator musi najpierw skonfigurować bota przez `/setup`.",
-    "no_packs": "Nie masz dostępnych paczek. Następne otrzymasz {{time}}.",
-    "no_members": "Brak kwalifikujących się członków do wylosowania.",
-    "success": "Wylosowałeś kartę **{{username}}** — {{tierName}}! Paczek pozostało: **{{packsLeft}}**"
+    "no_config": "Administrator musi najpierw skonfigurowac bota przez `/setup`.",
+    "no_packs": "Nie masz **{{count}}x {{packName}}**. Darmowe basic packi wroca {{time}}.",
+    "no_owned_pack": "Nie masz **{{count}}x {{packName}}** w swoim ekwipunku. Uzyj `/shop view` i `/shop buy`.",
+    "no_members": "Brak kwalifikujacych sie czlonkow do wylosowania.",
+    "success": "Otworzyles **{{packAmount}}x {{packName}}** i otrzymales **{{count}} kart**! Paczek tego typu pozostalo: **{{packsLeft}}**"
   },
   "inventory": {
-    "empty": "Twoje inventory jest puste. Otwórz paczkę przez `/open`!",
-    "title": "Inventory — {{username}}",
-    "line": "#{{id}} **{{username}}** — {{tierName}} (T{{tier}})",
-    "footer": "Strona {{page}}/{{totalPages}} · Łącznie: {{total}} kart"
+    "empty": "Twoje inventory jest puste. Otworz paczke przez `/open`!",
+    "title": "Inventory - {{username}}",
+    "line": "#{{id}} **{{username}}** - {{tierName}} (T{{tier}})",
+    "footer": "Strona {{page}}/{{totalPages}} | Lacznie: {{total}} kart",
+    "only_owner": "Tylko wlasciciel inventory moze przewijac te karty."
   },
   "balance": {
-    "title": "Portfel — {{username}}",
+    "title": "Portfel - {{username}}",
     "field_coins": "Monety",
-    "field_packs": "Paczki",
-    "field_next": "Następna paczka",
+    "field_packs": "Darmowe Basic Packi",
+    "field_shop_packs": "Kupione Paczki",
+    "field_next": "Nastepna paczka",
     "now": "Teraz"
+  },
+  "shop": {
+    "title": "Sklep z paczkami",
+    "pack_line": "**{{name}}**\nCena: **{{price}}** monet\nKarty w paczce: **{{cards}}**\nMasz: **{{owned}}**\n{{description}}",
+    "no_funds": "Za malo monet. Potrzebujesz **{{totalPrice}}** monet.",
+    "buy_success": "Kupiles **{{amount}}x {{packName}}** za **{{totalPrice}}** monet. Nowe saldo: **{{balance}}**."
   },
   "sell": {
     "not_found": "Nie znaleziono karty #{{id}} w twoim inventory.",
-    "listed": "Ta karta jest wystawiona na giełdzie. Wycofaj ją najpierw przez `/market cancel`.",
-    "success": "Sprzedałeś kartę **#{{id}}** ({{tierName}}) za 🪙 **{{value}}** monet!"
+    "listed": "Ta karta jest wystawiona na gieldzie. Wycofaj ja najpierw przez `/market cancel`.",
+    "success": "Sprzedales karte **#{{id}}** ({{tierName}}) za **{{value}}** monet!"
   },
   "trade": {
-    "self_or_bot": "Nie możesz handlować sam ze sobą ani z botami.",
+    "self_or_bot": "Nie mozesz handlowac sam ze soba ani z botami.",
     "no_your_card": "Nie posiadasz karty #{{id}}.",
     "no_their_card": "{{username}} nie posiada karty #{{id}}.",
     "embed_title": "Propozycja wymiany",
-    "embed_desc": "{{user1}} proponuje wymianę z {{user2}}",
-    "field_offers": "Oferuje — {{username}}",
-    "field_wants": "Chce — {{username}}",
-    "card_line": "Karta #{{id}} · <@{{cardUserId}}> · {{tierName}}",
-    "footer": "Masz 60 sekund na odpowiedź.",
-    "declined": "{{username}} odrzucił wymianę.",
-    "unavailable": "Jedna z kart nie jest już dostępna. Wymiana anulowana.",
-    "success": "Wymiana zakończona! {{user1}} i {{user2}} wymienili karty."
+    "embed_desc": "{{user1}} proponuje wymiane z {{user2}}",
+    "field_offers": "Oferuje - {{username}}",
+    "field_wants": "Chce - {{username}}",
+    "card_line": "Karta #{{id}} | <@{{cardUserId}}> | {{tierName}}",
+    "footer": "Masz 60 sekund na odpowiedz.",
+    "declined": "{{username}} odrzucil wymiane.",
+    "unavailable": "Jedna z kart nie jest juz dostepna. Wymiana anulowana.",
+    "success": "Wymiana zakonczona! {{user1}} i {{user2}} wymienili karty."
   },
   "market": {
     "list_not_found": "Nie znaleziono karty w twoim inventory.",
-    "list_already": "Ta karta jest już wystawiona na giełdzie.",
-    "list_success": "Karta #{{cardId}} wystawiona za 🪙 **{{price}}** (oferta #{{listingId}}).",
-    "buy_not_found": "Oferta nie istnieje lub została już sprzedana.",
-    "buy_own": "Nie możesz kupić własnej oferty.",
-    "buy_no_funds": "Za mało monet. Potrzebujesz 🪙 **{{price}}**.",
-    "buy_success": "Kupiłeś kartę <@{{cardUserId}}> ({{tierName}}) za 🪙 **{{price}}**!",
-    "view_empty": "Brak ofert na giełdzie.",
-    "view_title": "Giełda kart",
-    "view_line": "#{{id}} <@{{cardUserId}}> — {{tierName}} · 🪙 **{{price}}** · sprzedaje <@{{sellerId}}>",
-    "view_footer": "Strona {{page}}/{{totalPages}} · Łącznie: {{total}} ofert",
+    "list_already": "Ta karta jest juz wystawiona na gieldzie.",
+    "list_success": "Karta #{{cardId}} wystawiona za **{{price}}** (oferta #{{listingId}}).",
+    "buy_not_found": "Oferta nie istnieje lub zostala juz sprzedana.",
+    "buy_own": "Nie mozesz kupic wlasnej oferty.",
+    "buy_no_funds": "Za malo monet. Potrzebujesz **{{price}}**.",
+    "buy_success": "Kupiles karte <@{{cardUserId}}> ({{tierName}}) za **{{price}}**!",
+    "view_empty": "Brak ofert na gieldzie.",
+    "view_title": "Gielda kart",
+    "view_line": "#{{id}} <@{{cardUserId}}> - {{tierName}} | **{{price}}** | sprzedaje <@{{sellerId}}>",
+    "view_footer": "Strona {{page}}/{{totalPages}} | Lacznie: {{total}} ofert",
     "cancel_not_found": "Nie znaleziono twojej oferty o tym ID.",
-    "cancel_success": "Oferta #{{id}} została wycofana."
+    "cancel_success": "Oferta #{{id}} zostala wycofana."
   },
   "cards": {
     "not_found": "Nie znaleziono karty o tym ID na tym serwerze.",
-    "user_error": "Nie można pobrać danych użytkownika tej karty.",
-    "info": "Karta #{{id}} · {{tierName}} · Właściciel: <@{{ownerId}}>"
+    "user_error": "Nie mozna pobrac danych uzytkownika tej karty.",
+    "info": "Karta #{{id}} | {{tierName}} | Cena bazowa: {{value}} | Wlasciciel: <@{{ownerId}}>"
   },
   "top": {
-    "balance_title": "Top 10 — Monety",
-    "cards_title": "Top 10 — Liczba kart",
-    "rarity_title": "Top 10 — Najwyższy Tier",
+    "balance_title": "Top 10 - Monety",
+    "cards_title": "Top 10 - Liczba kart",
+    "rarity_title": "Top 10 - Najwyzszy Tier",
     "no_data": "Brak danych.",
-    "balance_line": "<@{{userId}}> — 🪙 {{balance}}",
-    "cards_line": "<@{{ownerId}}> — 📦 {{count}} kart",
-    "rarity_line": "<@{{ownerId}}> — ✨ Tier {{tier}}"
+    "balance_line": "<@{{userId}}> - {{balance}}",
+    "cards_line": "<@{{ownerId}}> - {{count}} kart",
+    "rarity_line": "<@{{ownerId}}> - Tier {{tier}}"
   },
   "setup": {
-    "success": "Konfiguracja zapisana!\n📍 Kanał: {{channel}}\n⏰ Interwał: **{{interval}}h**\n📦 Paczek na cykl: **{{packs}}**",
-    "excluded_role": "\n🚫 Wykluczona rola: {{role}}"
+    "success": "Konfiguracja zapisana!\nKanal: {{channel}}\nInterwal: **{{interval}}h**\nPaczek na cykl: **{{packs}}**",
+    "excluded_role": "\nWykluczona rola: {{role}}"
+  },
+  "help": {
+    "title": "Instrukcja obslugi",
+    "description": "Najwazniejsze komendy bota i szybki start dla graczy oraz administratorow.",
+    "fields": {
+      "quick_start": "Szybki start",
+      "gameplay": "Komendy gracza",
+      "admin": "Komendy administratora",
+      "dev": "Komendy developerskie"
+    },
+    "quick_start": {
+      "setup": "1. Administrator uzywa `/setup`, aby ustawic kanal i tempo rozdawania paczek.",
+      "open": "2. Gracz otwiera paczki przez `/open` i zdobywa karty czlonkow serwera.",
+      "inventory": "3. Kolekcje sprawdzisz przez `/inventory`, a konkretna karte przez `/cards id:<id>`.",
+      "market": "4. Nadmiarowe karty mozesz sprzedac bezposrednio przez `/sell` albo wystawic przez `/market list`."
+    },
+    "commands": {
+      "open": "`/open [pack] [amount]` - otwiera wybrana paczke; male serie maja slider, duze serie podsumowanie.",
+      "inventory": "`/inventory [page]` - pokazuje twoje karty z podzialem na strony.",
+      "cards": "`/cards id:<id>` - generuje podglad wybranej karty.",
+      "balance": "`/balance` - pokazuje monety, paczki i czas do kolejnej paczki.",
+      "shop": "`/shop view` i `/shop buy` - sklep z lepszymi paczkami za monety.",
+      "sell": "`/sell id:<id>` - sprzedaje karte za wartosc bazowa.",
+      "market": "`/market list|buy|view|cancel` - obsluga gieldy kart.",
+      "trade": "`/trade user:<gracz> your_card:<id> their_card:<id>` - proponuje wymiane kart.",
+      "top": "`/top [by]` - ranking wedlug monet, liczby kart lub najwyzszego tieru.",
+      "setup": "`/setup channel:<kanal> interval:<h> packs:<liczba> [excluded_role]` - konfiguracja serwera.",
+      "help": "`/help` - wyswietla te instrukcje.",
+      "dev": "`/dev ...` - narzedzia testowe dostepne tylko w trybie developerskim."
+    }
   },
   "errors": {
-    "generic": "Wystąpił błąd podczas wykonywania komendy."
+    "generic": "Wystapil blad podczas wykonywania komendy.",
+    "no_permission": "Do uzycia tej komendy potrzebne sa uprawnienia **Administratora**.",
+    "database_unavailable": "Bot nie moze polaczyc sie z baza danych. Sprawdz, czy PostgreSQL dziala i czy `DATABASE_URL` jest poprawny."
   }
 }

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS inventory (
   owner_id     VARCHAR(20) NOT NULL,
   guild_id     VARCHAR(20) NOT NULL,
   card_user_id VARCHAR(20) NOT NULL,
-  rarity       SMALLINT    NOT NULL CHECK (rarity BETWEEN 1 AND 20),
+  rarity       SMALLINT    NOT NULL CHECK (rarity BETWEEN 1 AND 25),
   obtained_at  TIMESTAMP   NOT NULL DEFAULT NOW()
 );
 
@@ -31,6 +31,14 @@ CREATE TABLE IF NOT EXISTS market_listings (
   inventory_id INTEGER     NOT NULL REFERENCES inventory(id) ON DELETE CASCADE,
   price        INTEGER     NOT NULL,
   listed_at    TIMESTAMP   NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS user_pack_inventory (
+  user_id   VARCHAR(20) NOT NULL,
+  guild_id  VARCHAR(20) NOT NULL,
+  pack_type VARCHAR(32) NOT NULL,
+  amount    INTEGER     NOT NULL DEFAULT 0,
+  PRIMARY KEY (user_id, guild_id, pack_type)
 );
 
 CREATE INDEX IF NOT EXISTS idx_inventory_owner  ON inventory(owner_id, guild_id);

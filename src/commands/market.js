@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const pool = require('../db/pool');
 const { getTierData } = require('../services/rarity');
 const { getT } = require('../services/i18n');
@@ -63,10 +63,10 @@ module.exports = {
       ]);
 
       if (!cardRes.rows.length) {
-        return interaction.reply({ content: t('market.list_not_found'), ephemeral: true });
+        return interaction.reply({ content: t('market.list_not_found'), flags: MessageFlags.Ephemeral });
       }
       if (listedRes.rows.length) {
-        return interaction.reply({ content: t('market.list_already'), ephemeral: true });
+        return interaction.reply({ content: t('market.list_already'), flags: MessageFlags.Ephemeral });
       }
 
       const { rows } = await pool.query(
@@ -76,7 +76,7 @@ module.exports = {
 
       return interaction.reply({
         content: t('market.list_success', { cardId, price, listingId: rows[0].id }),
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -95,14 +95,14 @@ module.exports = {
 
         if (!listingRes.rows.length) {
           await pool.query('ROLLBACK');
-          return interaction.reply({ content: t('market.buy_not_found'), ephemeral: true });
+          return interaction.reply({ content: t('market.buy_not_found'), flags: MessageFlags.Ephemeral });
         }
 
         const item = listingRes.rows[0];
 
         if (item.seller_id === interaction.user.id) {
           await pool.query('ROLLBACK');
-          return interaction.reply({ content: t('market.buy_own'), ephemeral: true });
+          return interaction.reply({ content: t('market.buy_own'), flags: MessageFlags.Ephemeral });
         }
 
         const buyerRes = await pool.query(
@@ -112,7 +112,7 @@ module.exports = {
 
         if (!buyerRes.rows.length || buyerRes.rows[0].balance < item.price) {
           await pool.query('ROLLBACK');
-          return interaction.reply({ content: t('market.buy_no_funds', { price: item.price }), ephemeral: true });
+          return interaction.reply({ content: t('market.buy_no_funds', { price: item.price }), flags: MessageFlags.Ephemeral });
         }
 
         await pool.query(`UPDATE users SET balance = balance - $1 WHERE user_id=$2 AND guild_id=$3`, [item.price, interaction.user.id, interaction.guildId]);
@@ -124,7 +124,7 @@ module.exports = {
         const tier = getTierData(item.rarity);
         return interaction.reply({
           content: t('market.buy_success', { cardUserId: item.card_user_id, tierName: tier.name, price: item.price }),
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       } catch (err) {
         await pool.query('ROLLBACK');
@@ -153,7 +153,7 @@ module.exports = {
       const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
       if (!listRes.rows.length) {
-        return interaction.reply({ content: t('market.view_empty'), ephemeral: true });
+        return interaction.reply({ content: t('market.view_empty'), flags: MessageFlags.Ephemeral });
       }
 
       const lines = listRes.rows.map(r => {
@@ -179,9 +179,9 @@ module.exports = {
       );
 
       if (!res.rowCount) {
-        return interaction.reply({ content: t('market.cancel_not_found'), ephemeral: true });
+        return interaction.reply({ content: t('market.cancel_not_found'), flags: MessageFlags.Ephemeral });
       }
-      return interaction.reply({ content: t('market.cancel_success', { id: listingId }), ephemeral: true });
+      return interaction.reply({ content: t('market.cancel_success', { id: listingId }), flags: MessageFlags.Ephemeral });
     }
   },
 };

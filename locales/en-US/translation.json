@@ -1,27 +1,36 @@
 {
   "open": {
     "no_config": "An administrator must first configure the bot using `/setup`.",
-    "no_packs": "You have no packs available. Next ones arrive {{time}}.",
+    "no_packs": "You do not have **{{count}}x {{packName}}** available. Free basic packs return {{time}}.",
+    "no_owned_pack": "You do not own **{{count}}x {{packName}}**. Use `/shop view` and `/shop buy`.",
     "no_members": "There are no eligible members to draw from.",
-    "success": "You drew **{{username}}**'s card — {{tierName}}! Packs remaining: **{{packsLeft}}**"
+    "success": "You opened **{{packAmount}}x {{packName}}** and received **{{count}} cards**! Packs of this type remaining: **{{packsLeft}}**"
   },
   "inventory": {
     "empty": "Your inventory is empty. Open a pack with `/open`!",
-    "title": "Inventory — {{username}}",
-    "line": "#{{id}} **{{username}}** — {{tierName}} (T{{tier}})",
-    "footer": "Page {{page}}/{{totalPages}} · Total: {{total}} cards"
+    "title": "Inventory - {{username}}",
+    "line": "#{{id}} **{{username}}** - {{tierName}} (T{{tier}})",
+    "footer": "Page {{page}}/{{totalPages}} | Total: {{total}} cards",
+    "only_owner": "Only the inventory owner can browse these cards."
   },
   "balance": {
-    "title": "Wallet — {{username}}",
+    "title": "Wallet - {{username}}",
     "field_coins": "Coins",
-    "field_packs": "Packs",
+    "field_packs": "Free Basic Packs",
+    "field_shop_packs": "Owned Shop Packs",
     "field_next": "Next pack",
     "now": "Now"
+  },
+  "shop": {
+    "title": "Pack Shop",
+    "pack_line": "**{{name}}**\nPrice: **{{price}}** coins\nCards per pack: **{{cards}}**\nOwned: **{{owned}}**\n{{description}}",
+    "no_funds": "Not enough coins. You need **{{totalPrice}}** coins.",
+    "buy_success": "You bought **{{amount}}x {{packName}}** for **{{totalPrice}}** coins. New balance: **{{balance}}**."
   },
   "sell": {
     "not_found": "Card #{{id}} was not found in your inventory.",
     "listed": "This card is listed on the market. Remove it first with `/market cancel`.",
-    "success": "You sold card **#{{id}}** ({{tierName}}) for 🪙 **{{value}}** coins!"
+    "success": "You sold card **#{{id}}** ({{tierName}}) for **{{value}}** coins!"
   },
   "trade": {
     "self_or_bot": "You cannot trade with yourself or bots.",
@@ -29,9 +38,9 @@
     "no_their_card": "{{username}} does not own card #{{id}}.",
     "embed_title": "Trade Offer",
     "embed_desc": "{{user1}} proposes a trade with {{user2}}",
-    "field_offers": "Offers — {{username}}",
-    "field_wants": "Wants — {{username}}",
-    "card_line": "Card #{{id}} · <@{{cardUserId}}> · {{tierName}}",
+    "field_offers": "Offers - {{username}}",
+    "field_wants": "Wants - {{username}}",
+    "card_line": "Card #{{id}} | <@{{cardUserId}}> | {{tierName}}",
     "footer": "You have 60 seconds to respond.",
     "declined": "{{username}} declined the trade.",
     "unavailable": "One of the cards is no longer available. Trade cancelled.",
@@ -40,37 +49,69 @@
   "market": {
     "list_not_found": "Card not found in your inventory.",
     "list_already": "This card is already listed on the market.",
-    "list_success": "Card #{{cardId}} listed for 🪙 **{{price}}** (offer #{{listingId}}).",
+    "list_success": "Card #{{cardId}} listed for **{{price}}** (offer #{{listingId}}).",
     "buy_not_found": "This offer does not exist or has already been sold.",
     "buy_own": "You cannot buy your own listing.",
-    "buy_no_funds": "Not enough coins. You need 🪙 **{{price}}**.",
-    "buy_success": "You bought <@{{cardUserId}}>'s card ({{tierName}}) for 🪙 **{{price}}**!",
+    "buy_no_funds": "Not enough coins. You need **{{price}}**.",
+    "buy_success": "You bought <@{{cardUserId}}>'s card ({{tierName}}) for **{{price}}**!",
     "view_empty": "There are no listings on the market.",
     "view_title": "Card Market",
-    "view_line": "#{{id}} <@{{cardUserId}}> — {{tierName}} · 🪙 **{{price}}** · by <@{{sellerId}}>",
-    "view_footer": "Page {{page}}/{{totalPages}} · Total: {{total}} listings",
+    "view_line": "#{{id}} <@{{cardUserId}}> - {{tierName}} | **{{price}}** | by <@{{sellerId}}>",
+    "view_footer": "Page {{page}}/{{totalPages}} | Total: {{total}} listings",
     "cancel_not_found": "No listing with that ID was found for you.",
     "cancel_success": "Listing #{{id}} has been removed."
   },
   "cards": {
     "not_found": "No card with that ID was found on this server.",
     "user_error": "Could not fetch user data for this card.",
-    "info": "Card #{{id}} · {{tierName}} · Owner: <@{{ownerId}}>"
+    "info": "Card #{{id}} | {{tierName}} | Base value: {{value}} | Owner: <@{{ownerId}}>"
   },
   "top": {
-    "balance_title": "Top 10 — Coins",
-    "cards_title": "Top 10 — Card Count",
-    "rarity_title": "Top 10 — Highest Tier",
+    "balance_title": "Top 10 - Coins",
+    "cards_title": "Top 10 - Card Count",
+    "rarity_title": "Top 10 - Highest Tier",
     "no_data": "No data yet.",
-    "balance_line": "<@{{userId}}> — 🪙 {{balance}}",
-    "cards_line": "<@{{ownerId}}> — 📦 {{count}} cards",
-    "rarity_line": "<@{{ownerId}}> — ✨ Tier {{tier}}"
+    "balance_line": "<@{{userId}}> - {{balance}}",
+    "cards_line": "<@{{ownerId}}> - {{count}} cards",
+    "rarity_line": "<@{{ownerId}}> - Tier {{tier}}"
   },
   "setup": {
-    "success": "Configuration saved!\n📍 Channel: {{channel}}\n⏰ Interval: **{{interval}}h**\n📦 Packs per cycle: **{{packs}}**",
-    "excluded_role": "\n🚫 Excluded role: {{role}}"
+    "success": "Configuration saved!\nChannel: {{channel}}\nInterval: **{{interval}}h**\nPacks per cycle: **{{packs}}**",
+    "excluded_role": "\nExcluded role: {{role}}"
+  },
+  "help": {
+    "title": "User Guide",
+    "description": "The most important bot commands and a quick start for players and administrators.",
+    "fields": {
+      "quick_start": "Quick Start",
+      "gameplay": "Player Commands",
+      "admin": "Administrator Commands",
+      "dev": "Developer Commands"
+    },
+    "quick_start": {
+      "setup": "1. An administrator runs `/setup` to configure the bot channel and pack cadence.",
+      "open": "2. A player opens packs with `/open` to get cards of server members.",
+      "inventory": "3. Check your collection with `/inventory`, and preview a specific card with `/cards id:<id>`.",
+      "market": "4. Extra cards can be sold directly with `/sell` or listed on the market with `/market list`."
+    },
+    "commands": {
+      "open": "`/open [pack] [amount]` - opens a selected pack; small pulls use a slider, large pulls show a summary.",
+      "inventory": "`/inventory [page]` - shows your cards in pages.",
+      "cards": "`/cards id:<id>` - generates a preview of a selected card.",
+      "balance": "`/balance` - shows your coins, packs, and time until the next pack.",
+      "shop": "`/shop view` and `/shop buy` - better packs for coins.",
+      "sell": "`/sell id:<id>` - sells a card for its base value.",
+      "market": "`/market list|buy|view|cancel` - card market actions.",
+      "trade": "`/trade user:<player> your_card:<id> their_card:<id>` - proposes a card trade.",
+      "top": "`/top [by]` - leaderboard by coins, card count, or highest tier.",
+      "setup": "`/setup channel:<channel> interval:<h> packs:<count> [excluded_role]` - server configuration.",
+      "help": "`/help` - shows this guide.",
+      "dev": "`/dev ...` - testing tools available only in development mode."
+    }
   },
   "errors": {
-    "generic": "An error occurred while executing this command."
+    "generic": "An error occurred while executing this command.",
+    "no_permission": "You need the **Administrator** permission to use this command.",
+    "database_unavailable": "The bot could not connect to the database. Check whether PostgreSQL is running and whether `DATABASE_URL` is correct."
   }
 }

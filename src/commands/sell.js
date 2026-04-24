@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const pool = require('../db/pool');
 const { getTierData } = require('../services/rarity');
 const { getT } = require('../services/i18n');
@@ -29,10 +29,10 @@ module.exports = {
     ]);
 
     if (!cardRes.rows.length) {
-      return interaction.reply({ content: t('sell.not_found', { id: cardId }), ephemeral: true });
+      return interaction.reply({ content: t('sell.not_found', { id: cardId }), flags: MessageFlags.Ephemeral });
     }
     if (listedRes.rows.length) {
-      return interaction.reply({ content: t('sell.listed'), ephemeral: true });
+      return interaction.reply({ content: t('sell.listed'), flags: MessageFlags.Ephemeral });
     }
 
     const tier = getTierData(cardRes.rows[0].rarity);
@@ -52,7 +52,7 @@ module.exports = {
 
     await interaction.reply({
       content: t('sell.success', { id: cardId, tierName: tier.name, value: tier.baseValue }),
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     });
   },
 };

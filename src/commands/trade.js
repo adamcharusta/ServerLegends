@@ -4,6 +4,7 @@ const {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  MessageFlags,
 } = require('discord.js');
 const pool = require('../db/pool');
 const { getTierData } = require('../services/rarity');
@@ -42,7 +43,7 @@ module.exports = {
     const theirCardId = interaction.options.getInteger('their_card');
 
     if (target.id === interaction.user.id || target.bot) {
-      return interaction.reply({ content: t('trade.self_or_bot'), ephemeral: true });
+      return interaction.reply({ content: t('trade.self_or_bot'), flags: MessageFlags.Ephemeral });
     }
 
     const [yourRes, theirRes] = await Promise.all([
@@ -57,10 +58,10 @@ module.exports = {
     ]);
 
     if (!yourRes.rows.length) {
-      return interaction.reply({ content: t('trade.no_your_card', { id: yourCardId }), ephemeral: true });
+      return interaction.reply({ content: t('trade.no_your_card', { id: yourCardId }), flags: MessageFlags.Ephemeral });
     }
     if (!theirRes.rows.length) {
-      return interaction.reply({ content: t('trade.no_their_card', { username: target.username, id: theirCardId }), ephemeral: true });
+      return interaction.reply({ content: t('trade.no_their_card', { username: target.username, id: theirCardId }), flags: MessageFlags.Ephemeral });
     }
 
     const yourTier  = getTierData(yourRes.rows[0].rarity);

@@ -46,7 +46,7 @@ module.exports = {
     const attachment = new AttachmentBuilder(buffer, { name: 'card.png' });
 
     await interaction.editReply({
-      content: t('cards.info', { id: card.id, tierName: tier.name, ownerId: card.owner_id }),
+      content: t('cards.info', { id: card.id, tierName: tier.name, ownerId: card.owner_id, value: tier.baseValue }),
       files: [attachment],
     });
   },

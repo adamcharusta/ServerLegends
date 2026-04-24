@@ -18,23 +18,39 @@ const TIERS = [
   { tier: 17, name: 'Divine I',      color: '#FFD54F', bgTop: '#F57F17', bgBottom: '#7A3F00', baseValue: 3600 },
   { tier: 18, name: 'Divine II',     color: '#FFE082', bgTop: '#FF8F00', bgBottom: '#804800', baseValue: 4500 },
   { tier: 19, name: 'Transcendent',  color: '#B2FF59', bgTop: '#33691E', bgBottom: '#1A340F', baseValue: 6000 },
-  { tier: 20, name: 'Celestial',     color: '#E040FB', bgTop: '#4A0072', bgBottom: '#200030', baseValue: 10000 },
+  { tier: 20, name: 'Valentine',     color: '#FF6FAE', bgTop: '#7D1148', bgBottom: '#2F091B', baseValue: 8500, event: true, theme: 'valentine' },
+  { tier: 21, name: 'Easter',        color: '#9AF07A', bgTop: '#3A6B1A', bgBottom: '#162B09', baseValue: 8500, event: true, theme: 'easter' },
+  { tier: 22, name: 'Halloween',    color: '#FF8C2A', bgTop: '#5A2300', bgBottom: '#1F0D00', baseValue: 8500, event: true, theme: 'halloween' },
+  { tier: 23, name: 'Christmas',    color: '#7BE0D0', bgTop: '#0C4B40', bgBottom: '#06211C', baseValue: 8500, event: true, theme: 'christmas' },
+  { tier: 24, name: 'Horse Day',    color: '#C69A6B', bgTop: '#5C3922', bgBottom: '#24140B', baseValue: 8500, event: true, theme: 'horse' },
+  { tier: 25, name: 'Celestial',     color: '#E040FB', bgTop: '#4A0072', bgBottom: '#200030', baseValue: 10000, theme: 'celestial' },
 ];
 
-const WEIGHTS = TIERS.map((_, i) => Math.max(1, Math.floor(10000 * Math.pow(0.6, i))));
-const TOTAL_WEIGHT = WEIGHTS.reduce((a, b) => a + b, 0);
+const ROLLABLE_TIERS = TIERS.filter(tier => !tier.event);
+const BASE_WEIGHTS = ROLLABLE_TIERS.map((_, i) => 10000 * Math.pow(0.6, i));
+const MAX_TIER = TIERS.length;
 
-function rollRarity() {
-  let roll = Math.random() * TOTAL_WEIGHT;
-  for (let i = 0; i < WEIGHTS.length; i++) {
-    roll -= WEIGHTS[i];
-    if (roll <= 0) return TIERS[i];
+function rollRarity(options = {}) {
+  const weightMultiplier = options.weightMultiplier ?? (() => 1);
+  const weights = ROLLABLE_TIERS.map((tier, index) =>
+    Math.max(0, BASE_WEIGHTS[index] * weightMultiplier(tier))
+  );
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+
+  if (totalWeight <= 0) {
+    return ROLLABLE_TIERS[0];
   }
-  return TIERS[0];
+
+  let roll = Math.random() * totalWeight;
+  for (let i = 0; i < weights.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return ROLLABLE_TIERS[i];
+  }
+  return ROLLABLE_TIERS[0];
 }
 
 function getTierData(tier) {
-  return TIERS[tier - 1];
+  return TIERS.find(entry => entry.tier === tier);
 }
 
-module.exports = { TIERS, rollRarity, getTierData };
+module.exports = { TIERS, ROLLABLE_TIERS, MAX_TIER, rollRarity, getTierData };
