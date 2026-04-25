@@ -2,6 +2,16 @@ const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js'
 const { ensureUser } = require('../services/pack');
 const { getT } = require('../services/i18n');
 const { PACK_TYPES, getPackConfig, getOwnedPackCounts, buyPack, ensurePackInventoryTable } = require('../services/shop');
+const en = require('../../locales/en-US/translation.json');
+const pl = require('../../locales/pl/translation.json');
+
+function getPackName(t, pack) {
+  return t(`packs.${pack.key}.name`, { defaultValue: pack.key });
+}
+
+function getPackDescription(t, pack) {
+  return t(`packs.${pack.key}.description`);
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,8 +36,8 @@ module.exports = {
 
           for (const pack of PACK_TYPES) {
             option.addChoices({
-              name: `${pack.name} (${pack.price})`,
-              name_localizations: { pl: `${pack.name} (${pack.price})` },
+              name: `${en.packs[pack.key].name} (${pack.price})`,
+              name_localizations: { pl: `${pl.packs[pack.key].name} (${pack.price})` },
               value: pack.key,
             });
           }
@@ -57,11 +67,11 @@ module.exports = {
       const ownedPacks = await getOwnedPackCounts(interaction.user.id, interaction.guildId);
       const lines = PACK_TYPES.map(pack =>
         t('shop.pack_line', {
-          name: pack.name,
+          name: getPackName(t, pack),
           price: pack.price,
           cards: pack.cards,
           owned: ownedPacks[pack.key] ?? 0,
-          description: pack.description,
+          description: getPackDescription(t, pack),
         })
       );
 
@@ -89,7 +99,7 @@ module.exports = {
       return interaction.reply({
         content: t('shop.buy_success', {
           amount,
-          packName: pack.name,
+          packName: getPackName(t, pack),
           totalPrice: result.totalPrice,
           balance: result.balance,
         }),

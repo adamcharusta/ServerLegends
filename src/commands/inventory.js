@@ -13,31 +13,31 @@ const { getT } = require('../services/i18n');
 
 const LIST_PAGE_SIZE = 10;
 
-function buildNavigationRow(currentIndex, totalCards, baseId) {
+function buildNavigationRow(t, currentIndex, totalCards, baseId) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`${baseId}:prev`)
-      .setLabel('◀ Poprzednia')
+      .setLabel(t('common.previous'))
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(currentIndex === 0),
     new ButtonBuilder()
       .setCustomId(`${baseId}:next`)
-      .setLabel('Następna ▶')
+      .setLabel(t('common.next'))
       .setStyle(ButtonStyle.Primary)
       .setDisabled(currentIndex === totalCards - 1)
   );
 }
 
-function buildListNavigationRow(listPageIndex, totalListPages, baseId) {
+function buildListNavigationRow(t, listPageIndex, totalListPages, baseId) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`${baseId}:list-prev`)
-      .setLabel('◀ Spis')
+      .setLabel(t('inventory.list_previous'))
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(listPageIndex === 0),
     new ButtonBuilder()
       .setCustomId(`${baseId}:list-next`)
-      .setLabel('Spis ▶')
+      .setLabel(t('inventory.list_next'))
       .setStyle(ButtonStyle.Primary)
       .setDisabled(listPageIndex === totalListPages - 1)
   );
@@ -55,14 +55,14 @@ function buildInventoryContent(t, card, username, currentIndex, total, cards, li
 
   return `${t('inventory.title', { username })}
 
-Karta: **${currentIndex + 1}/${total}**
+${t('inventory.current_card', { current: currentIndex + 1, total })}
 #${card.id} - **${card.cardUsername}** - ${tier.name} (T${card.rarity})
-Cena bazowa: **${tier.baseValue}**
+${t('inventory.base_value', { value: tier.baseValue })}
 
-Wlasciciel karty: <@${card.card_user_id}>
-Uzyj \`/sell id:${card.id}\` aby sprzedac albo \`/market list card_id:${card.id} price:<cena>\` aby wystawic ja na gielde.
+${t('inventory.card_owner', { userId: card.card_user_id })}
+${t('inventory.actions', { id: card.id })}
 
-Spis kart: **${listPageIndex + 1}/${totalListPages}**
+${t('inventory.card_list', { page: listPageIndex + 1, totalPages: totalListPages })}
 ${listLines}`;
 }
 
@@ -70,7 +70,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('inventory')
     .setDescription('Browse your cards')
-    .setDescriptionLocalizations({ pl: 'Przeglądaj swoje karty' })
+    .setDescriptionLocalizations({ pl: 'Przegladaj swoje karty' })
     .addIntegerOption(o =>
       o.setName('page')
         .setDescription('Page number')
@@ -105,7 +105,7 @@ module.exports = {
 
       return {
         ...row,
-        cardUsername: user?.username ?? `User ${row.card_user_id}`,
+        cardUsername: user?.username ?? t('common.unknown_user', { id: row.card_user_id }),
         avatarURL: user
           ? user.displayAvatarURL({ extension: 'png', forceStatic: true, size: 256 })
           : null,
@@ -144,8 +144,8 @@ module.exports = {
           }),
         ],
         components: [
-          buildNavigationRow(currentIndex, cards.length, baseId),
-          buildListNavigationRow(listPageIndex, totalListPages, baseId),
+          buildNavigationRow(t, currentIndex, cards.length, baseId),
+          buildListNavigationRow(t, listPageIndex, totalListPages, baseId),
         ],
       };
     };

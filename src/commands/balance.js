@@ -4,6 +4,10 @@ const { ensureUser } = require('../services/pack');
 const { getT } = require('../services/i18n');
 const { ensurePackInventoryTable, getOwnedPackCounts, PACK_TYPES } = require('../services/shop');
 
+function getPackName(t, pack) {
+  return t(`packs.${pack.key}.name`, { defaultValue: pack.key });
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('balance')
@@ -27,14 +31,14 @@ module.exports = {
       ? Math.floor(new Date(row.next_pack_at).getTime() / 1000)
       : null;
     const purchasedSummary = PACK_TYPES
-      .map(pack => `${pack.name}: ${ownedPacks[pack.key] ?? 0}`)
+      .map(pack => `${getPackName(t, pack)}: ${ownedPacks[pack.key] ?? 0}`)
       .join('\n');
 
     const embed = new EmbedBuilder()
       .setTitle(t('balance.title', { username: interaction.user.username }))
       .addFields(
-        { name: t('balance.field_coins'), value: `💰 ${row.balance}`, inline: true },
-        { name: t('balance.field_packs'), value: `📦 ${row.packs_available}`, inline: true },
+        { name: t('balance.field_coins'), value: `${row.balance}`, inline: true },
+        { name: t('balance.field_packs'), value: `${row.packs_available}`, inline: true },
         { name: t('balance.field_next'), value: ts ? `<t:${ts}:R>` : t('balance.now'), inline: true },
         { name: t('balance.field_shop_packs'), value: purchasedSummary }
       )

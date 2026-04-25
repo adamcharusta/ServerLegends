@@ -4,8 +4,6 @@ const { rollRarity } = require('./rarity');
 const PACK_TYPES = [
   {
     key: 'basic',
-    name: 'Basic Pack',
-    description: 'Najtansza paczka i darmowy hourly drop. Glownie commony, z rzadszymi uncommonami.',
     price: 90,
     cards: 10,
     isFreeCyclePack: true,
@@ -24,8 +22,6 @@ const PACK_TYPES = [
   },
   {
     key: 'adventurer',
-    name: 'Adventurer Pack',
-    description: 'Solidny booster z wyraznie lepsza szansa na uncommony, rare i mid-tier.',
     price: 260,
     cards: 10,
     rollMultiplier(tier) {
@@ -42,8 +38,6 @@ const PACK_TYPES = [
   },
   {
     key: 'royal',
-    name: 'Royal Pack',
-    description: 'Droga paczka z mocnym boostem na high-tier i realna szansa na grubszy pull.',
     price: 700,
     cards: 10,
     rollMultiplier(tier) {
@@ -60,8 +54,6 @@ const PACK_TYPES = [
   },
   {
     key: 'celestial',
-    name: 'Celestial Pack',
-    description: 'Najdrozszy booster. Najmocniej cisnie w najwyzsze tiery.',
     price: 1800,
     cards: 10,
     rollMultiplier(tier) {

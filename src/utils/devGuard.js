@@ -1,4 +1,5 @@
 const { MessageFlags } = require('discord.js');
+const { getT } = require('../services/i18n');
 
 const DEV_IDS = new Set(
   (process.env.DEV_USER_IDS ?? '').split(',').map(id => id.trim()).filter(Boolean)
@@ -14,8 +15,9 @@ function isDev(interaction) {
 
 async function requireDev(interaction) {
   if (isDev(interaction)) return true;
-  await interaction.reply({ content: '🚫 Dev mode only.', flags: MessageFlags.Ephemeral });
+  const t = getT(interaction.locale);
+  await interaction.reply({ content: t('dev.mode_only'), flags: MessageFlags.Ephemeral });
   return false;
 }
 
-module.exports = { isDev, isDevUser, requireDev };
+module.exports = { requireDev, isDev, isDevUser };

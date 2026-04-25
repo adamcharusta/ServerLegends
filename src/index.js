@@ -22,7 +22,7 @@ for (const file of fs.readdirSync(path.join(__dirname, 'commands')).filter(f => 
 }
 
 client.once('clientReady', () => {
-  console.log(`Zalogowano jako ${client.user.tag}`);
+  console.log(`Logged in as ${client.user.tag}`);
 });
 
 client.on('interactionCreate', async interaction => {

@@ -10,34 +10,40 @@ const { openSelectedPack } = require('../services/pack');
 const { generateCard } = require('../services/card');
 const { getT } = require('../services/i18n');
 const { PACK_TYPES } = require('../services/shop');
+const en = require('../../locales/en-US/translation.json');
+const pl = require('../../locales/pl/translation.json');
 
 const MAX_SUMMARY_LINES = 12;
 const MAX_SLIDER_PACKS = 5;
 const MAX_BULK_HIGHLIGHTS = 10;
 
-function buildNavigationRow(currentIndex, totalCards, baseId) {
+function getPackName(t, pack) {
+  return t(`packs.${pack.key}.name`, { defaultValue: pack.key });
+}
+
+function buildNavigationRow(t, currentIndex, totalCards, baseId) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`${baseId}:prev`)
-      .setLabel('◀ Poprzednia')
+      .setLabel(t('common.previous'))
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(currentIndex === 0),
     new ButtonBuilder()
       .setCustomId(`${baseId}:next`)
-      .setLabel('Następna ▶')
+      .setLabel(t('common.next'))
       .setStyle(ButtonStyle.Primary)
       .setDisabled(currentIndex === totalCards - 1)
   );
 }
 
-function buildSummary(cards) {
+function buildSummary(t, cards) {
   const visibleCards = cards.slice(0, MAX_SUMMARY_LINES);
   const lines = visibleCards.map((card, index) =>
     `${index + 1}. #${card.cardId} - **${card.pickedUser.username}** - ${card.tierInfo.name}`
   );
 
   if (cards.length > MAX_SUMMARY_LINES) {
-    lines.push(`... i jeszcze **${cards.length - MAX_SUMMARY_LINES}** kolejnych kart.`);
+    lines.push(t('open.more_cards', { count: cards.length - MAX_SUMMARY_LINES }));
   }
 
   return lines.join('\n');
@@ -73,19 +79,19 @@ function buildBulkHighlights(cards) {
 
 function buildPackContent(t, cards, currentIndex, pack, packAmount, packsLeft) {
   const currentCard = cards[currentIndex];
-  const summary = buildSummary(cards);
+  const summary = buildSummary(t, cards);
 
   return `${t('open.success', {
-    packName: pack.name,
+    packName: getPackName(t, pack),
     packAmount,
     count: cards.length,
     packsLeft,
   })}
 
-Aktualna karta: **${currentIndex + 1}/${cards.length}**
+${t('open.current_card', { current: currentIndex + 1, total: cards.length })}
 #${currentCard.cardId} - **${currentCard.pickedUser.username}** - ${currentCard.tierInfo.name} (T${currentCard.tierInfo.tier})
 
-Podsumowanie pulli:
+${t('open.pull_summary')}
 ${summary}`;
 }
 
@@ -95,20 +101,20 @@ function buildBulkContent(t, cards, pack, packAmount, packsLeft) {
   const breakdown = buildBulkBreakdown(cards);
 
   return `${t('open.success', {
-    packName: pack.name,
+    packName: getPackName(t, pack),
     packAmount,
     count: cards.length,
     packsLeft,
   })}
 
-Tryb zbiorczy: otworzono **${packAmount}** paczek naraz.
-Najlepsza karta:
+${t('open.bulk_mode', { packAmount })}
+${t('open.best_card')}
 #${bestCard.cardId} - **${bestCard.pickedUser.username}** - ${bestCard.tierInfo.name} (T${bestCard.tierInfo.tier})
 
-Top pulli:
+${t('open.top_pulls')}
 ${highlights}
 
-Rozklad tierow:
+${t('open.tier_breakdown')}
 ${breakdown}`;
 }
 
@@ -125,8 +131,8 @@ module.exports = {
 
       for (const pack of PACK_TYPES) {
         option.addChoices({
-          name: `${pack.name} (${pack.price})`,
-          name_localizations: { pl: `${pack.name} (${pack.price})` },
+          name: `${en.packs[pack.key].name} (${pack.price})`,
+          name_localizations: { pl: `${pl.packs[pack.key].name} (${pack.price})` },
           value: pack.key,
         });
       }
@@ -165,14 +171,14 @@ module.exports = {
         ? `<t:${Math.floor(new Date(result.nextPackAt).getTime() / 1000)}:R>`
         : t('balance.now');
       return interaction.editReply(t('open.no_packs', {
-        packName: result.pack.name,
+        packName: getPackName(t, result.pack),
         count: result.requestedAmount,
         time,
       }));
     }
     if (result.error === 'no_owned_pack') {
       return interaction.editReply(t('open.no_owned_pack', {
-        packName: result.pack.name,
+        packName: getPackName(t, result.pack),
         count: result.requestedAmount,
       }));
     }
@@ -234,7 +240,7 @@ module.exports = {
           name: `card-${currentIndex + 1}.png`,
         }),
       ],
-      components: [buildNavigationRow(currentIndex, renderedCards.length, baseId)],
+      components: [buildNavigationRow(t, currentIndex, renderedCards.length, baseId)],
     });
 
     const message = await interaction.editReply({
@@ -251,7 +257,7 @@ module.exports = {
 
       if (buttonInteraction.user.id !== interaction.user.id) {
         await buttonInteraction.reply({
-          content: 'Tylko osoba otwierajaca paczke moze przewijac te karty.',
+          content: t('open.only_owner'),
           flags: MessageFlags.Ephemeral,
         });
         return;

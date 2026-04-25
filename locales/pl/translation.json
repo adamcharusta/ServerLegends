@@ -1,17 +1,55 @@
 {
+  "common": {
+    "previous": "Poprzednia",
+    "next": "Nastepna",
+    "unknown_user": "Uzytkownik {{id}}"
+  },
+  "packs": {
+    "basic": {
+      "name": "Basic Pack",
+      "description": "Najtansza paczka i darmowy hourly drop. Glownie commony, z rzadszymi uncommonami."
+    },
+    "adventurer": {
+      "name": "Adventurer Pack",
+      "description": "Solidny booster z wyraznie lepsza szansa na uncommony, rare i mid-tier."
+    },
+    "royal": {
+      "name": "Royal Pack",
+      "description": "Droga paczka z mocnym boostem na high-tier i realna szansa na grubszy pull."
+    },
+    "celestial": {
+      "name": "Celestial Pack",
+      "description": "Najdrozszy booster. Najmocniej cisnie w najwyzsze tiery."
+    }
+  },
   "open": {
     "no_config": "Administrator musi najpierw skonfigurowac bota przez `/setup`.",
     "no_packs": "Nie masz **{{count}}x {{packName}}**. Darmowe basic packi wroca {{time}}.",
     "no_owned_pack": "Nie masz **{{count}}x {{packName}}** w swoim ekwipunku. Uzyj `/shop view` i `/shop buy`.",
     "no_members": "Brak kwalifikujacych sie czlonkow do wylosowania.",
-    "success": "Otworzyles **{{packAmount}}x {{packName}}** i otrzymales **{{count}} kart**! Paczek tego typu pozostalo: **{{packsLeft}}**"
+    "success": "Otworzyles **{{packAmount}}x {{packName}}** i otrzymales **{{count}} kart**! Paczek tego typu pozostalo: **{{packsLeft}}**",
+    "current_card": "Aktualna karta: **{{current}}/{{total}}**",
+    "pull_summary": "Podsumowanie pulli:",
+    "more_cards": "... i jeszcze **{{count}}** kolejnych kart.",
+    "bulk_mode": "Tryb zbiorczy: otworzono **{{packAmount}}** paczek naraz.",
+    "best_card": "Najlepsza karta:",
+    "top_pulls": "Top pulli:",
+    "tier_breakdown": "Rozklad tierow:",
+    "only_owner": "Tylko osoba otwierajaca paczke moze przewijac te karty."
   },
   "inventory": {
     "empty": "Twoje inventory jest puste. Otworz paczke przez `/open`!",
     "title": "Inventory - {{username}}",
     "line": "#{{id}} **{{username}}** - {{tierName}} (T{{tier}})",
     "footer": "Strona {{page}}/{{totalPages}} | Lacznie: {{total}} kart",
-    "only_owner": "Tylko wlasciciel inventory moze przewijac te karty."
+    "only_owner": "Tylko wlasciciel inventory moze przewijac te karty.",
+    "current_card": "Karta: **{{current}}/{{total}}**",
+    "base_value": "Cena bazowa: **{{value}}**",
+    "card_owner": "Wlasciciel karty: <@{{userId}}>",
+    "actions": "Uzyj `/sell id:{{id}}` aby sprzedac albo `/market list card_id:{{id}} price:<cena>` aby wystawic ja na gielde.",
+    "card_list": "Spis kart: **{{page}}/{{totalPages}}**",
+    "list_previous": "Spis wstecz",
+    "list_next": "Spis dalej"
   },
   "balance": {
     "title": "Portfel - {{username}}",
@@ -30,6 +68,7 @@
   "odds": {
     "title": "Szanse dropu - {{packName}}",
     "line": "`T{{tier}}` **{{tierName}}** - {{chance}}",
+    "tiny_chance": "<0.00001% (~1 na {{oneIn}} kart)",
     "footer": "Szansa dotyczy pojedynczej karty z tej paczki. Paczka zawiera {{cards}} kart."
   },
   "sell": {
@@ -114,6 +153,24 @@
       "help": "`/help` - wyswietla te instrukcje.",
       "dev": "`/dev ...` - narzedzia testowe dostepne tylko w trybie developerskim."
     }
+  },
+  "dev": {
+    "mode_only": "Tylko tryb developerski.",
+    "give_packs_success": "Dodano **{{count}}** paczek.",
+    "give_coins_success": "Dodano **{{amount}}** monet.",
+    "cooldown_reset": "Cooldown paczki zresetowany.",
+    "give_card_success": "Dodano karte **#{{id}}** - {{username}} ({{tierName}} T{{tier}}, wartosc {{value}}).",
+    "wipe_success": "Usunieto **{{count}}** kart z twojego inventory.",
+    "empty": "Pusto",
+    "status_title": "[DEV] Status konta",
+    "field_coins": "Monety",
+    "field_packs": "Paczki",
+    "field_next_pack_at": "Nastepna paczka",
+    "field_inventory_breakdown": "Podzial inventory",
+    "seed_title": "[DEV] Dodano {{count}} kart",
+    "preview_card": "[DEV] Podglad: **{{username}}** - {{tierName}} T{{tier}} - wartosc {{value}}",
+    "preview_all": "[DEV] Podglad **{{username}}**\nStyl: **{{tierName}}** (T{{tier}})\nCena bazowa: **{{value}}**\nKarta **{{current}}/{{total}}**",
+    "preview_only_owner": "Tylko osoba uruchamiajaca ten podglad moze przewijac wzory kart."
   },
   "errors": {
     "generic": "Wystapil blad podczas wykonywania komendy.",

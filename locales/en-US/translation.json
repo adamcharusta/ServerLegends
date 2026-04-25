@@ -1,17 +1,55 @@
 {
+  "common": {
+    "previous": "Previous",
+    "next": "Next",
+    "unknown_user": "User {{id}}"
+  },
+  "packs": {
+    "basic": {
+      "name": "Basic Pack",
+      "description": "The cheapest pack and the free hourly drop. Mostly common cards, with some uncommon cards."
+    },
+    "adventurer": {
+      "name": "Adventurer Pack",
+      "description": "A solid booster with much better odds for uncommon, rare, and mid-tier cards."
+    },
+    "royal": {
+      "name": "Royal Pack",
+      "description": "An expensive pack with a strong high-tier boost and a real chance for a big pull."
+    },
+    "celestial": {
+      "name": "Celestial Pack",
+      "description": "The most expensive booster. Focused most heavily on the highest tiers."
+    }
+  },
   "open": {
     "no_config": "An administrator must first configure the bot using `/setup`.",
     "no_packs": "You do not have **{{count}}x {{packName}}** available. Free basic packs return {{time}}.",
     "no_owned_pack": "You do not own **{{count}}x {{packName}}**. Use `/shop view` and `/shop buy`.",
     "no_members": "There are no eligible members to draw from.",
-    "success": "You opened **{{packAmount}}x {{packName}}** and received **{{count}} cards**! Packs of this type remaining: **{{packsLeft}}**"
+    "success": "You opened **{{packAmount}}x {{packName}}** and received **{{count}} cards**! Packs of this type remaining: **{{packsLeft}}**",
+    "current_card": "Current card: **{{current}}/{{total}}**",
+    "pull_summary": "Pull summary:",
+    "more_cards": "... and **{{count}}** more cards.",
+    "bulk_mode": "Bulk mode: opened **{{packAmount}}** packs at once.",
+    "best_card": "Best card:",
+    "top_pulls": "Top pulls:",
+    "tier_breakdown": "Tier breakdown:",
+    "only_owner": "Only the person opening the pack can browse these cards."
   },
   "inventory": {
     "empty": "Your inventory is empty. Open a pack with `/open`!",
     "title": "Inventory - {{username}}",
     "line": "#{{id}} **{{username}}** - {{tierName}} (T{{tier}})",
     "footer": "Page {{page}}/{{totalPages}} | Total: {{total}} cards",
-    "only_owner": "Only the inventory owner can browse these cards."
+    "only_owner": "Only the inventory owner can browse these cards.",
+    "current_card": "Card: **{{current}}/{{total}}**",
+    "base_value": "Base value: **{{value}}**",
+    "card_owner": "Card owner: <@{{userId}}>",
+    "actions": "Use `/sell id:{{id}}` to sell it or `/market list card_id:{{id}} price:<price>` to list it on the market.",
+    "card_list": "Card list: **{{page}}/{{totalPages}}**",
+    "list_previous": "List prev",
+    "list_next": "List next"
   },
   "balance": {
     "title": "Wallet - {{username}}",
@@ -30,6 +68,7 @@
   "odds": {
     "title": "Drop Odds - {{packName}}",
     "line": "`T{{tier}}` **{{tierName}}** - {{chance}}",
+    "tiny_chance": "<0.00001% (~1 in {{oneIn}} cards)",
     "footer": "Chance is shown per single card in this pack. The pack contains {{cards}} cards."
   },
   "sell": {
@@ -114,6 +153,24 @@
       "help": "`/help` - shows this guide.",
       "dev": "`/dev ...` - testing tools available only in development mode."
     }
+  },
+  "dev": {
+    "mode_only": "Dev mode only.",
+    "give_packs_success": "Added **{{count}}** packs.",
+    "give_coins_success": "Added **{{amount}}** coins.",
+    "cooldown_reset": "Pack cooldown reset.",
+    "give_card_success": "Added card **#{{id}}** - {{username}} ({{tierName}} T{{tier}}, value {{value}}).",
+    "wipe_success": "Deleted **{{count}}** cards from your inventory.",
+    "empty": "Empty",
+    "status_title": "[DEV] Account status",
+    "field_coins": "Coins",
+    "field_packs": "Packs",
+    "field_next_pack_at": "Next pack at",
+    "field_inventory_breakdown": "Inventory breakdown",
+    "seed_title": "[DEV] Seeded {{count}} cards",
+    "preview_card": "[DEV] Preview: **{{username}}** - {{tierName}} T{{tier}} - value {{value}}",
+    "preview_all": "[DEV] Previewing **{{username}}**\nStyle: **{{tierName}}** (T{{tier}})\nBase value: **{{value}}**\nCard **{{current}}/{{total}}**",
+    "preview_only_owner": "Only the person who started this preview can browse card styles."
   },
   "errors": {
     "generic": "An error occurred while executing this command.",

@@ -13,6 +13,7 @@ const { TIERS, MAX_TIER, rollRarity, getTierData } = require('../services/rarity
 const { generateCard } = require('../services/card');
 const { requireDev } = require('../utils/devGuard');
 const { generateMockAvatar } = require('../utils/mockAvatar');
+const { getT } = require('../services/i18n');
 
 const MOCK_USERS = [
   { id: '1', username: 'Alice Dev', displayName: 'Alice' },
@@ -27,16 +28,16 @@ const MOCK_USERS = [
 
 const PREVIEW_TIER_COUNT = TIERS.length;
 
-function buildPreviewRow(currentIndex, totalCards, baseId) {
+function buildPreviewRow(t, currentIndex, totalCards, baseId) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`${baseId}:prev`)
-      .setLabel('◀ Poprzednia')
+      .setLabel(t('common.previous'))
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(currentIndex === 0),
     new ButtonBuilder()
       .setCustomId(`${baseId}:next`)
-      .setLabel('Następna ▶')
+      .setLabel(t('common.next'))
       .setStyle(ButtonStyle.Primary)
       .setDisabled(currentIndex === totalCards - 1)
   );
@@ -115,6 +116,7 @@ module.exports = {
   async execute(interaction) {
     if (!await requireDev(interaction)) return;
 
+    const t = getT(interaction.locale);
     const sub = interaction.options.getSubcommand();
     await ensureUser(interaction.user.id, interaction.guildId);
 
@@ -124,7 +126,7 @@ module.exports = {
         `UPDATE users SET packs_available = packs_available + $1 WHERE user_id=$2 AND guild_id=$3`,
         [count, interaction.user.id, interaction.guildId]
       );
-      return interaction.reply({ content: `Added **${count}** packs.`, flags: MessageFlags.Ephemeral });
+      return interaction.reply({ content: t('dev.give_packs_success', { count }), flags: MessageFlags.Ephemeral });
     }
 
     if (sub === 'give-coins') {
@@ -133,7 +135,7 @@ module.exports = {
         `UPDATE users SET balance = balance + $1 WHERE user_id=$2 AND guild_id=$3`,
         [amount, interaction.user.id, interaction.guildId]
       );
-      return interaction.reply({ content: `Added **${amount}** coins.`, flags: MessageFlags.Ephemeral });
+      return interaction.reply({ content: t('dev.give_coins_success', { amount }), flags: MessageFlags.Ephemeral });
     }
 
     if (sub === 'reset-cooldown') {
@@ -141,7 +143,7 @@ module.exports = {
         `UPDATE users SET next_pack_at = NULL WHERE user_id=$1 AND guild_id=$2`,
         [interaction.user.id, interaction.guildId]
       );
-      return interaction.reply({ content: 'Pack cooldown reset.', flags: MessageFlags.Ephemeral });
+      return interaction.reply({ content: t('dev.cooldown_reset'), flags: MessageFlags.Ephemeral });
     }
 
     if (sub === 'give-card') {
@@ -156,7 +158,13 @@ module.exports = {
       );
 
       return interaction.reply({
-        content: `Added card **#${rows[0].id}** - ${target.username} (${tierInfo.name} T${tierInfo.tier}, value ${tierInfo.baseValue}).`,
+        content: t('dev.give_card_success', {
+          id: rows[0].id,
+          username: target.username,
+          tierName: tierInfo.name,
+          tier: tierInfo.tier,
+          value: tierInfo.baseValue,
+        }),
         flags: MessageFlags.Ephemeral,
       });
     }
@@ -166,7 +174,7 @@ module.exports = {
         `DELETE FROM inventory WHERE owner_id=$1 AND guild_id=$2`,
         [interaction.user.id, interaction.guildId]
       );
-      return interaction.reply({ content: `Deleted **${rowCount}** cards from your inventory.`, flags: MessageFlags.Ephemeral });
+      return interaction.reply({ content: t('dev.wipe_success', { count: rowCount }), flags: MessageFlags.Ephemeral });
     }
 
     if (sub === 'status') {
@@ -184,15 +192,15 @@ module.exports = {
 
       const breakdown = inv.length
         ? inv.map(r => `T${r.rarity} (${getTierData(r.rarity).name}): ${r.cnt}`).join('\n')
-        : 'Empty';
+        : t('dev.empty');
 
       const embed = new EmbedBuilder()
-        .setTitle('[DEV] Account status')
+        .setTitle(t('dev.status_title'))
         .addFields(
-          { name: 'Coins', value: `${row.balance}`, inline: true },
-          { name: 'Packs', value: `${row.packs_available}`, inline: true },
-          { name: 'Next pack at', value: ts ? `<t:${ts}:R>` : 'Now', inline: true },
-          { name: 'Inventory breakdown', value: breakdown }
+          { name: t('dev.field_coins'), value: `${row.balance}`, inline: true },
+          { name: t('dev.field_packs'), value: `${row.packs_available}`, inline: true },
+          { name: t('dev.field_next_pack_at'), value: ts ? `<t:${ts}:R>` : t('balance.now'), inline: true },
+          { name: t('dev.field_inventory_breakdown'), value: breakdown }
         )
         .setColor(0x00FF99);
 
@@ -222,7 +230,7 @@ module.exports = {
       const lines = added.map(e => `\`#${e.id}\` **${e.mock.username}** - ${e.tierInfo.name} T${e.tierInfo.tier}`);
 
       const embed = new EmbedBuilder()
-        .setTitle(`[DEV] Seeded ${added.length} cards`)
+        .setTitle(t('dev.seed_title', { count: added.length }))
         .setDescription(lines.join('\n'))
         .setColor(0x00FF99);
 
@@ -242,7 +250,12 @@ module.exports = {
       const attachment = new AttachmentBuilder(cardBuffer, { name: 'card.png' });
 
       return interaction.editReply({
-        content: `[DEV] Preview: **${mock.username}** - ${tierInfo.name} T${tierInfo.tier} - value ${tierInfo.baseValue}`,
+        content: t('dev.preview_card', {
+          username: mock.username,
+          tierName: tierInfo.name,
+          tier: tierInfo.tier,
+          value: tierInfo.baseValue,
+        }),
         files: [attachment],
       });
     }
@@ -274,13 +287,20 @@ module.exports = {
       const buildReplyPayload = () => {
         const current = previews[currentIndex];
         return {
-          content: `[DEV] Previewing **${target.username}**\nStyl: **${current.tierInfo.name}** (T${current.tier})\nCena bazowa: **${current.tierInfo.baseValue}**\nKarta **${currentIndex + 1}/${previews.length}**`,
+          content: t('dev.preview_all', {
+            username: target.username,
+            tierName: current.tierInfo.name,
+            tier: current.tier,
+            value: current.tierInfo.baseValue,
+            current: currentIndex + 1,
+            total: previews.length,
+          }),
           files: [
             new AttachmentBuilder(current.buffer, {
               name: `preview-${target.id}-tier-${current.tier}.png`,
             }),
           ],
-          components: [buildPreviewRow(currentIndex, previews.length, baseId)],
+          components: [buildPreviewRow(t, currentIndex, previews.length, baseId)],
         };
       };
 
@@ -298,7 +318,7 @@ module.exports = {
 
         if (buttonInteraction.user.id !== interaction.user.id) {
           await buttonInteraction.reply({
-            content: 'Tylko osoba uruchamiajaca ten podglad moze przewijac wzory kart.',
+            content: t('dev.preview_only_owner'),
             flags: MessageFlags.Ephemeral,
           });
           return;
@@ -318,8 +338,6 @@ module.exports = {
       collector.on('end', async () => {
         await interaction.editReply({ components: [] }).catch(() => {});
       });
-
-      return;
     }
   },
 };
