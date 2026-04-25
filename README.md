@@ -80,6 +80,7 @@ Schemat zostanie zaladowany automatycznie z [src/db/schema.sql](/c:/Users/charu/
 
 - `/help` - pokazuje skrocona instrukcje bezposrednio w Discordzie
 - `/open [pack] [amount]` - otwiera wybrana paczke; do 5 paczek daje slider, a dla 6-50 robi tryb zbiorczy
+- `/odds [pack]` - pokazuje szanse na kazdy tier dla wybranego typu paczki
 - `/shop view` - pokazuje wszystkie dostepne paczki i ich ceny
 - `/shop buy pack:<typ> amount:<liczba>` - kupuje paczki za monety
 - `/inventory [page]` - pokazuje twoje karty
@@ -136,7 +137,7 @@ Bot ma 25 poziomow kart:
 24. `Horse Day` - karta eventowa
 25. `Celestial`
 
-Eventowe karty sa specjalnymi poziomami tuz pod `Celestial` i nie wypadaja ze zwyklego losowania przez caly rok, dopoki nie podepniesz ich pod aktywny event.
+Eventowe karty sa stale dostepne w zwyklym losowaniu, ale maja ekstremalnie niski drop. W praktyce sa bardzo rzadkie, a `Celestial` pozostaje jeszcze rzadszy.
 
 ### Tryb developerski
 

@@ -27,6 +27,11 @@
     "no_funds": "Za malo monet. Potrzebujesz **{{totalPrice}}** monet.",
     "buy_success": "Kupiles **{{amount}}x {{packName}}** za **{{totalPrice}}** monet. Nowe saldo: **{{balance}}**."
   },
+  "odds": {
+    "title": "Szanse dropu - {{packName}}",
+    "line": "`T{{tier}}` **{{tierName}}** - {{chance}}",
+    "footer": "Szansa dotyczy pojedynczej karty z tej paczki. Paczka zawiera {{cards}} kart."
+  },
   "sell": {
     "not_found": "Nie znaleziono karty #{{id}} w twoim inventory.",
     "listed": "Ta karta jest wystawiona na gieldzie. Wycofaj ja najpierw przez `/market cancel`.",
@@ -96,6 +101,7 @@
     },
     "commands": {
       "open": "`/open [pack] [amount]` - otwiera wybrana paczke; male serie maja slider, duze serie podsumowanie.",
+      "odds": "`/odds [pack]` - pokazuje szanse dropu dla wybranej paczki.",
       "inventory": "`/inventory [page]` - pokazuje twoje karty z podzialem na strony.",
       "cards": "`/cards id:<id>` - generuje podglad wybranej karty.",
       "balance": "`/balance` - pokazuje monety, paczki i czas do kolejnej paczki.",

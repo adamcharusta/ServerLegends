@@ -27,6 +27,11 @@
     "no_funds": "Not enough coins. You need **{{totalPrice}}** coins.",
     "buy_success": "You bought **{{amount}}x {{packName}}** for **{{totalPrice}}** coins. New balance: **{{balance}}**."
   },
+  "odds": {
+    "title": "Drop Odds - {{packName}}",
+    "line": "`T{{tier}}` **{{tierName}}** - {{chance}}",
+    "footer": "Chance is shown per single card in this pack. The pack contains {{cards}} cards."
+  },
   "sell": {
     "not_found": "Card #{{id}} was not found in your inventory.",
     "listed": "This card is listed on the market. Remove it first with `/market cancel`.",
@@ -96,6 +101,7 @@
     },
     "commands": {
       "open": "`/open [pack] [amount]` - opens a selected pack; small pulls use a slider, large pulls show a summary.",
+      "odds": "`/odds [pack]` - shows the drop odds for a selected pack.",
       "inventory": "`/inventory [page]` - shows your cards in pages.",
       "cards": "`/cards id:<id>` - generates a preview of a selected card.",
       "balance": "`/balance` - shows your coins, packs, and time until the next pack.",

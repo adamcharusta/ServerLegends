@@ -10,6 +10,7 @@ const PACK_TYPES = [
     cards: 10,
     isFreeCyclePack: true,
     rollMultiplier(tier) {
+      if (tier.event) return 0.2;
       if (tier.tier <= 2) return 2.4;
       if (tier.tier <= 4) return 1.45;
       if (tier.tier <= 6) return 0.3;
@@ -28,6 +29,7 @@ const PACK_TYPES = [
     price: 260,
     cards: 10,
     rollMultiplier(tier) {
+      if (tier.event) return 0.8;
       if (tier.tier <= 2) return 0.7;
       if (tier.tier <= 6) return 1.1;
       if (tier.tier <= 10) return 1.45;
@@ -45,6 +47,7 @@ const PACK_TYPES = [
     price: 700,
     cards: 10,
     rollMultiplier(tier) {
+      if (tier.event) return 1.35;
       if (tier.tier <= 4) return 0.35;
       if (tier.tier <= 8) return 0.8;
       if (tier.tier <= 12) return 1.4;
@@ -62,6 +65,7 @@ const PACK_TYPES = [
     price: 1800,
     cards: 10,
     rollMultiplier(tier) {
+      if (tier.event) return 2.1;
       if (tier.tier <= 6) return 0.2;
       if (tier.tier <= 10) return 0.55;
       if (tier.tier <= 14) return 1.2;

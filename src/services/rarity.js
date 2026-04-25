@@ -26,8 +26,15 @@ const TIERS = [
   { tier: 25, name: 'Celestial',     color: '#E040FB', bgTop: '#4A0072', bgBottom: '#200030', baseValue: 10000, theme: 'celestial' },
 ];
 
-const ROLLABLE_TIERS = TIERS.filter(tier => !tier.event);
-const BASE_WEIGHTS = ROLLABLE_TIERS.map((_, i) => 10000 * Math.pow(0.6, i));
+const ROLLABLE_TIERS = [...TIERS];
+const BASE_WEIGHTS = ROLLABLE_TIERS.map((tier, index) => {
+  if (tier.tier === 25) return 0.01;
+  if (tier.event) {
+    return Math.max(0.02, 0.04 - ((tier.tier - 20) * 0.005));
+  }
+
+  return 10000 * Math.pow(0.6, index);
+});
 const MAX_TIER = TIERS.length;
 
 function rollRarity(options = {}) {
@@ -49,8 +56,25 @@ function rollRarity(options = {}) {
   return ROLLABLE_TIERS[0];
 }
 
+function getRarityOdds(options = {}) {
+  const weightMultiplier = options.weightMultiplier ?? (() => 1);
+  const weights = ROLLABLE_TIERS.map((tier, index) =>
+    Math.max(0, BASE_WEIGHTS[index] * weightMultiplier(tier))
+  );
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+
+  if (totalWeight <= 0) {
+    return ROLLABLE_TIERS.map(tier => ({ ...tier, probability: 0 }));
+  }
+
+  return ROLLABLE_TIERS.map((tier, index) => ({
+    ...tier,
+    probability: weights[index] / totalWeight,
+  }));
+}
+
 function getTierData(tier) {
   return TIERS.find(entry => entry.tier === tier);
 }
 
-module.exports = { TIERS, ROLLABLE_TIERS, MAX_TIER, rollRarity, getTierData };
+module.exports = { TIERS, ROLLABLE_TIERS, MAX_TIER, rollRarity, getRarityOdds, getTierData };

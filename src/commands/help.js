@@ -13,6 +13,7 @@ module.exports = {
 
     const gameplayLines = [
       t('help.commands.open'),
+      t('help.commands.odds'),
       t('help.commands.shop'),
       t('help.commands.inventory'),
       t('help.commands.cards'),
