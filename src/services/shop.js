@@ -67,6 +67,54 @@ const PACK_TYPES = [
       return 1;
     },
   },
+  {
+    key: 'mythic_vault',
+    price: 4500,
+    cards: 10,
+    guarantee: { minTier: 11, count: 1 },
+    rollMultiplier(tier) {
+      if (tier.event) return 1.6;
+      if (tier.tier <= 6) return 0.1;
+      if (tier.tier <= 10) return 0.9;
+      if (tier.tier <= 14) return 1.6;
+      if (tier.tier <= 18) return 1.4;
+      if (tier.tier === 19) return 0.9;
+      if (tier.tier === 25) return 0.35;
+      return 1;
+    },
+  },
+  {
+    key: 'ancient_relic',
+    price: 12000,
+    cards: 10,
+    guarantee: { minTier: 15, count: 1 },
+    rollMultiplier(tier) {
+      if (tier.event) return 2.4;
+      if (tier.tier <= 8) return 0.05;
+      if (tier.tier <= 12) return 0.6;
+      if (tier.tier <= 16) return 2.0;
+      if (tier.tier <= 18) return 2.2;
+      if (tier.tier === 19) return 1.6;
+      if (tier.tier === 25) return 0.55;
+      return 1;
+    },
+  },
+  {
+    key: 'divine_throne',
+    price: 30000,
+    cards: 10,
+    guarantee: { minTier: 17, count: 1 },
+    rollMultiplier(tier) {
+      if (tier.event) return 3.2;
+      if (tier.tier <= 10) return 0.05;
+      if (tier.tier <= 14) return 0.5;
+      if (tier.tier <= 16) return 1.5;
+      if (tier.tier <= 18) return 3.0;
+      if (tier.tier === 19) return 2.6;
+      if (tier.tier === 25) return 1.1;
+      return 1;
+    },
+  },
 ];
 
 const PACKS_BY_KEY = new Map(PACK_TYPES.map(pack => [pack.key, pack]));
@@ -152,6 +200,15 @@ function rollPackCard(pack) {
   return rollRarity({ weightMultiplier: pack.rollMultiplier });
 }
 
+function rollGuaranteedCard(pack, minTier) {
+  return rollRarity({
+    weightMultiplier: (tier) => {
+      if (tier.tier < minTier) return 0;
+      return Math.max(pack.rollMultiplier(tier), 0.05);
+    },
+  });
+}
+
 module.exports = {
   PACK_TYPES,
   ensurePackInventoryTable,
@@ -160,4 +217,5 @@ module.exports = {
   buyPack,
   consumeOwnedPack,
   rollPackCard,
+  rollGuaranteedCard,
 };

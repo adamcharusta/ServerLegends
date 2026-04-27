@@ -20,6 +20,18 @@
     "celestial": {
       "name": "Celestial Pack",
       "description": "The most expensive booster. Focused most heavily on the highest tiers."
+    },
+    "mythic_vault": {
+      "name": "Mythic Vault",
+      "description": "Heavily skewed toward mid-to-high tiers. Cards bias upward through the Mythic range."
+    },
+    "ancient_relic": {
+      "name": "Ancient Relic",
+      "description": "Premium booster focused on Ancient and Divine ranges, with a strong shot at Transcendent."
+    },
+    "divine_throne": {
+      "name": "Divine Throne",
+      "description": "Endgame pack. The strongest top-end weights and the highest non-zero shot at Celestial."
     }
   },
   "open": {
@@ -62,6 +74,7 @@
   "shop": {
     "title": "Pack Shop",
     "pack_line": "**{{name}}**\nPrice: **{{price}}** coins\nCards per pack: **{{cards}}**\nOwned: **{{owned}}**\n{{description}}",
+    "guarantee": "**Guaranteed:** {{count}}x card at T{{minTier}} or higher.",
     "no_funds": "Not enough coins. You need **{{totalPrice}}** coins.",
     "buy_success": "You bought **{{amount}}x {{packName}}** for **{{totalPrice}}** coins. New balance: **{{balance}}**."
   },
@@ -69,12 +82,28 @@
     "title": "Drop Odds - {{packName}}",
     "line": "`T{{tier}}` **{{tierName}}** - {{chance}}",
     "tiny_chance": "<0.00001% (~1 in {{oneIn}} cards)",
+    "guarantee": "**Guaranteed:** {{count}}x card at tier T{{minTier}} or higher. Odds below apply to the remaining slots.",
     "footer": "Chance is shown per single card in this pack. The pack contains {{cards}} cards."
   },
   "sell": {
     "not_found": "Card #{{id}} was not found in your inventory.",
     "listed": "This card is listed on the market. Remove it first with `/market cancel`.",
     "success": "You sold card **#{{id}}** ({{tierName}}) for **{{value}}** coins!"
+  },
+  "sellbulk": {
+    "no_filter": "Provide at least one filter: `tier` or `user`.",
+    "bot_target": "Bots are not on cards.",
+    "no_matches": "No cards match the selected filters (cards listed on the market are excluded).",
+    "filter_tier": "Tier: **{{tierName}}** (T{{tier}})",
+    "filter_user": "Card user: **{{username}}**",
+    "preview": "You are about to sell **{{count}}** cards for **{{value}}** coins.\nFilter: {{filter}}\n\nPreview:",
+    "preview_more": "... and more cards.",
+    "confirm_button": "Sell",
+    "cancel_button": "Cancel",
+    "only_owner": "Only the person who started this action can confirm it.",
+    "cancelled": "Mass sell cancelled.",
+    "timeout": "Confirmation expired. Mass sell cancelled.",
+    "success": "Sold **{{count}}** cards for **{{value}}** coins!"
   },
   "trade": {
     "self_or_bot": "You cannot trade with yourself or bots.",
@@ -110,6 +139,33 @@
     "user_error": "Could not fetch user data for this card.",
     "info": "Card #{{id}} | {{tierName}} | Base value: {{value}} | Owner: <@{{ownerId}}>"
   },
+  "collection": {
+    "entry": "**Card showcase - {{username}}**\nStyle: **{{tierName}}** (T{{tier}})\nBase value: **{{value}}**\nCard **{{current}}/{{total}}**",
+    "bot_target": "Bots do not have a card showcase.",
+    "only_viewer": "Only the person who started this showcase can browse these cards."
+  },
+  "craft": {
+    "recipes_title": "Crafting Recipes",
+    "recipes_intro": "Each recipe burns N cards of the same player at the source tier and pays coins to receive 1 card of that player at the target tier.",
+    "recipes_footer": "Cards listed on the market are excluded. Burn order: oldest first (FIFO).",
+    "col_target": "Target",
+    "col_source": "Source",
+    "col_cost": "Coins",
+    "col_value": "Value",
+    "recipe_line": "**T{{targetTier}} {{targetTierName}}** = {{sourceCount}}x T{{sourceTier}} {{sourceTierName}} (same player) + **{{coinCost}}** coins",
+    "invalid_tier": "This tier cannot be crafted.",
+    "bot_target": "Bots are not on cards.",
+    "not_enough_cards": "You only have **{{have}}/{{need}}** cards of **{{username}}** at **{{sourceTierName}}** (T{{sourceTier}}). Cards listed on the market are excluded.",
+    "not_enough_coins": "Not enough coins: **{{have}}/{{need}}**.",
+    "preview": "**Craft preview**\nBurn: **{{sourceCount}}x {{sourceTierName}}** (T{{sourceTier}}) of **{{username}}** - cards: {{ids}}\nPay: **{{coinCost}}** coins\nReceive: **1x {{targetTierName}}** (T{{targetTier}}) of **{{username}}**.",
+    "confirm_button": "Craft",
+    "cancel_button": "Cancel",
+    "only_owner": "Only the person who started the craft can confirm it.",
+    "cancelled": "Crafting cancelled.",
+    "timeout": "Confirmation expired. Crafting cancelled.",
+    "materials_changed": "Required cards are no longer available (sold or listed). Crafting cancelled.",
+    "success": "Craft complete! Burned **{{sourceCount}}x {{sourceTierName}}** of **{{username}}** + **{{coinCost}}** coins.\nReceived: **#{{cardId}}** - **{{username}}** - {{targetTierName}} (T{{targetTier}})!"
+  },
   "top": {
     "balance_title": "Top 10 - Coins",
     "cards_title": "Top 10 - Card Count",
@@ -142,10 +198,13 @@
       "open": "`/open [pack] [amount]` - opens a selected pack; small pulls use a slider, large pulls show a summary.",
       "odds": "`/odds [pack]` - shows the drop odds for a selected pack.",
       "inventory": "`/inventory [page]` - shows your cards in pages.",
+      "collection": "`/collection user:<player>` - card showcase: previews how a player's card looks at every tier.",
       "cards": "`/cards id:<id>` - generates a preview of a selected card.",
       "balance": "`/balance` - shows your coins, packs, and time until the next pack.",
       "shop": "`/shop view` and `/shop buy` - better packs for coins.",
       "sell": "`/sell id:<id>` - sells a card for its base value.",
+      "sellbulk": "`/sellbulk [tier] [user]` - mass-sells matching cards (filters can be combined).",
+      "craft": "`/craft recipes` and `/craft do user:<player> tier:<n>` - upgrade N same-player cards + coins into a higher-tier card of that player (T2-T25, includes event and Celestial).",
       "market": "`/market list|buy|view|cancel` - card market actions.",
       "trade": "`/trade user:<player> your_card:<id> their_card:<id>` - proposes a card trade.",
       "top": "`/top [by]` - leaderboard by coins, card count, or highest tier.",

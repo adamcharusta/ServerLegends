@@ -59,9 +59,13 @@ module.exports = {
       })
     );
 
+    const description = pack.guarantee
+      ? `${t('odds.guarantee', { count: pack.guarantee.count, minTier: pack.guarantee.minTier })}\n\n${lines.join('\n')}`
+      : lines.join('\n');
+
     const embed = new EmbedBuilder()
       .setTitle(t('odds.title', { packName: getPackName(t, pack) }))
-      .setDescription(lines.join('\n'))
+      .setDescription(description)
       .setFooter({
         text: t('odds.footer', { cards: pack.cards }),
       })

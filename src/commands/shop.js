@@ -65,15 +65,19 @@ module.exports = {
 
     if (subcommand === 'view') {
       const ownedPacks = await getOwnedPackCounts(interaction.user.id, interaction.guildId);
-      const lines = PACK_TYPES.map(pack =>
-        t('shop.pack_line', {
+      const lines = PACK_TYPES.map(pack => {
+        const description = pack.guarantee
+          ? `${getPackDescription(t, pack)}\n${t('shop.guarantee', { count: pack.guarantee.count, minTier: pack.guarantee.minTier })}`
+          : getPackDescription(t, pack);
+
+        return t('shop.pack_line', {
           name: getPackName(t, pack),
           price: pack.price,
           cards: pack.cards,
           owned: ownedPacks[pack.key] ?? 0,
-          description: getPackDescription(t, pack),
-        })
-      );
+          description,
+        });
+      });
 
       const embed = new EmbedBuilder()
         .setTitle(t('shop.title'))

@@ -4,6 +4,7 @@ const {
   ensurePackInventoryTable,
   getPackConfig,
   rollPackCard,
+  rollGuaranteedCard,
 } = require('./shop');
 
 const MEMBER_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
@@ -170,22 +171,39 @@ async function openSelectedPack(userId, guildId, guild, packKey, amount = 1) {
       }
     }
 
-    for (let index = 0; index < pack.cards * packAmount; index++) {
-      const picked = candidates[Math.floor(Math.random() * candidates.length)];
-      const tierInfo = rollPackCard(pack);
+    const guaranteeCount = pack.guarantee?.count ?? 0;
+    const guaranteeMinTier = pack.guarantee?.minTier ?? 0;
 
-      const { rows: inserted } = await pool.query(
-        `INSERT INTO inventory (owner_id, guild_id, card_user_id, rarity)
-         VALUES ($1, $2, $3, $4) RETURNING id`,
-        [userId, guildId, picked.user.id, tierInfo.tier]
-      );
+    for (let p = 0; p < packAmount; p++) {
+      const tierRolls = [];
+      for (let i = 0; i < pack.cards; i++) {
+        tierRolls.push(
+          i < guaranteeCount
+            ? rollGuaranteedCard(pack, guaranteeMinTier)
+            : rollPackCard(pack)
+        );
+      }
+      for (let i = tierRolls.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tierRolls[i], tierRolls[j]] = [tierRolls[j], tierRolls[i]];
+      }
 
-      pulls.push({
-        cardId: inserted[0].id,
-        pickedUser: picked.user,
-        avatarURL: picked.user.displayAvatarURL({ extension: 'png', forceStatic: true, size: 256 }),
-        tierInfo,
-      });
+      for (const tierInfo of tierRolls) {
+        const picked = candidates[Math.floor(Math.random() * candidates.length)];
+
+        const { rows: inserted } = await pool.query(
+          `INSERT INTO inventory (owner_id, guild_id, card_user_id, rarity)
+           VALUES ($1, $2, $3, $4) RETURNING id`,
+          [userId, guildId, picked.user.id, tierInfo.tier]
+        );
+
+        pulls.push({
+          cardId: inserted[0].id,
+          pickedUser: picked.user,
+          avatarURL: picked.user.displayAvatarURL({ extension: 'png', forceStatic: true, size: 256 }),
+          tierInfo,
+        });
+      }
     }
 
     await pool.query('COMMIT');
@@ -202,4 +220,4 @@ async function openSelectedPack(userId, guildId, guild, packKey, amount = 1) {
   };
 }
 
-module.exports = { openPack, openSelectedPack, ensureUser };
+module.exports = { openPack, openSelectedPack, ensureUser, getCandidateMembers };

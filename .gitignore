@@ -3,3 +3,4 @@ node_modules/
 *.log
 .deploy-serverlegends.tgz
 .deploy-serverlegends-remote.sh
+backups/

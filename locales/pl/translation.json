@@ -20,6 +20,18 @@
     "celestial": {
       "name": "Celestial Pack",
       "description": "Najdrozszy booster. Najmocniej cisnie w najwyzsze tiery."
+    },
+    "mythic_vault": {
+      "name": "Mythic Vault",
+      "description": "Mocno odchylona w strone srednio-wysokich tierow. Pulle koncentruja sie wokol Mythic."
+    },
+    "ancient_relic": {
+      "name": "Ancient Relic",
+      "description": "Premium booster skupiony na Ancient i Divine, z mocna szansa na Transcendent."
+    },
+    "divine_throne": {
+      "name": "Divine Throne",
+      "description": "Endgame paczka. Najsilniejsze wagi w gornym zakresie i najwyzsza realna szansa na Celestial."
     }
   },
   "open": {
@@ -62,6 +74,7 @@
   "shop": {
     "title": "Sklep z paczkami",
     "pack_line": "**{{name}}**\nCena: **{{price}}** monet\nKarty w paczce: **{{cards}}**\nMasz: **{{owned}}**\n{{description}}",
+    "guarantee": "**Gwarancja:** {{count}}x karta na T{{minTier}} lub wyzszym.",
     "no_funds": "Za malo monet. Potrzebujesz **{{totalPrice}}** monet.",
     "buy_success": "Kupiles **{{amount}}x {{packName}}** za **{{totalPrice}}** monet. Nowe saldo: **{{balance}}**."
   },
@@ -69,12 +82,28 @@
     "title": "Szanse dropu - {{packName}}",
     "line": "`T{{tier}}` **{{tierName}}** - {{chance}}",
     "tiny_chance": "<0.00001% (~1 na {{oneIn}} kart)",
+    "guarantee": "**Gwarancja:** {{count}}x karta na tierze T{{minTier}} lub wyzszym. Szanse ponizej dotycza pozostalych slotow.",
     "footer": "Szansa dotyczy pojedynczej karty z tej paczki. Paczka zawiera {{cards}} kart."
   },
   "sell": {
     "not_found": "Nie znaleziono karty #{{id}} w twoim inventory.",
     "listed": "Ta karta jest wystawiona na gieldzie. Wycofaj ja najpierw przez `/market cancel`.",
     "success": "Sprzedales karte **#{{id}}** ({{tierName}}) za **{{value}}** monet!"
+  },
+  "sellbulk": {
+    "no_filter": "Podaj przynajmniej jeden filtr: `tier` lub `user`.",
+    "bot_target": "Boty nie pojawiaja sie na kartach.",
+    "no_matches": "Zadne karty nie pasuja do wybranych filtrow (karty wystawione na gieldzie sa pomijane).",
+    "filter_tier": "Tier: **{{tierName}}** (T{{tier}})",
+    "filter_user": "Uzytkownik z karty: **{{username}}**",
+    "preview": "Zaraz sprzedasz **{{count}}** kart za **{{value}}** monet.\nFiltr: {{filter}}\n\nPodglad:",
+    "preview_more": "... i wiecej kart.",
+    "confirm_button": "Sprzedaj",
+    "cancel_button": "Anuluj",
+    "only_owner": "Tylko osoba uruchamiajaca tej akcji moze ja potwierdzic.",
+    "cancelled": "Masowa sprzedaz anulowana.",
+    "timeout": "Czas na potwierdzenie minal. Masowa sprzedaz anulowana.",
+    "success": "Sprzedano **{{count}}** kart za **{{value}}** monet!"
   },
   "trade": {
     "self_or_bot": "Nie mozesz handlowac sam ze soba ani z botami.",
@@ -110,6 +139,33 @@
     "user_error": "Nie mozna pobrac danych uzytkownika tej karty.",
     "info": "Karta #{{id}} | {{tierName}} | Cena bazowa: {{value}} | Wlasciciel: <@{{ownerId}}>"
   },
+  "collection": {
+    "entry": "**Wystawa kart - {{username}}**\nStyl: **{{tierName}}** (T{{tier}})\nCena bazowa: **{{value}}**\nKarta **{{current}}/{{total}}**",
+    "bot_target": "Boty nie maja wystawy kart.",
+    "only_viewer": "Tylko osoba uruchamiajaca ta wystawe moze przewijac karty."
+  },
+  "craft": {
+    "recipes_title": "Receptury craftingu",
+    "recipes_intro": "Kazda receptura spala N kart tego samego gracza na tierze zrodlowym i pobiera monety, aby dac 1 karte tego gracza na tierze docelowym.",
+    "recipes_footer": "Karty wystawione na gieldzie sa pomijane. Kolejnosc spalania: najstarsze najpierw (FIFO).",
+    "col_target": "Cel",
+    "col_source": "Zrodlo",
+    "col_cost": "Monety",
+    "col_value": "Wartosc",
+    "recipe_line": "**T{{targetTier}} {{targetTierName}}** = {{sourceCount}}x T{{sourceTier}} {{sourceTierName}} (tego samego gracza) + **{{coinCost}}** monet",
+    "invalid_tier": "Tego tieru nie mozna skraftowac.",
+    "bot_target": "Boty nie pojawiaja sie na kartach.",
+    "not_enough_cards": "Masz tylko **{{have}}/{{need}}** kart **{{username}}** w tierze **{{sourceTierName}}** (T{{sourceTier}}). Karty wystawione na gieldzie sa pomijane.",
+    "not_enough_coins": "Za malo monet: **{{have}}/{{need}}**.",
+    "preview": "**Podglad craftu**\nSpalisz: **{{sourceCount}}x {{sourceTierName}}** (T{{sourceTier}}) gracza **{{username}}** - karty: {{ids}}\nZaplacisz: **{{coinCost}}** monet\nOtrzymasz: **1x {{targetTierName}}** (T{{targetTier}}) gracza **{{username}}**.",
+    "confirm_button": "Craftuj",
+    "cancel_button": "Anuluj",
+    "only_owner": "Tylko osoba uruchamiajaca craft moze go potwierdzic.",
+    "cancelled": "Crafting anulowany.",
+    "timeout": "Czas na potwierdzenie minal. Crafting anulowany.",
+    "materials_changed": "Wymagane karty nie sa juz dostepne (sprzedane lub wystawione). Crafting anulowany.",
+    "success": "Crafting udany! Spalono **{{sourceCount}}x {{sourceTierName}}** gracza **{{username}}** + **{{coinCost}}** monet.\nOtrzymales: **#{{cardId}}** - **{{username}}** - {{targetTierName}} (T{{targetTier}})!"
+  },
   "top": {
     "balance_title": "Top 10 - Monety",
     "cards_title": "Top 10 - Liczba kart",
@@ -142,10 +198,13 @@
       "open": "`/open [pack] [amount]` - otwiera wybrana paczke; male serie maja slider, duze serie podsumowanie.",
       "odds": "`/odds [pack]` - pokazuje szanse dropu dla wybranej paczki.",
       "inventory": "`/inventory [page]` - pokazuje twoje karty z podzialem na strony.",
+      "collection": "`/collection user:<gracz>` - wystawa kart: podglad jak karta gracza wyglada na kazdym tierze.",
       "cards": "`/cards id:<id>` - generuje podglad wybranej karty.",
       "balance": "`/balance` - pokazuje monety, paczki i czas do kolejnej paczki.",
       "shop": "`/shop view` i `/shop buy` - sklep z lepszymi paczkami za monety.",
       "sell": "`/sell id:<id>` - sprzedaje karte za wartosc bazowa.",
+      "sellbulk": "`/sellbulk [tier] [user]` - masowa sprzedaz pasujacych kart (filtry mozna laczyc).",
+      "craft": "`/craft recipes` i `/craft do user:<gracz> tier:<n>` - ulepsz N kart tego samego gracza + monety na karte wyzszego tieru tego gracza (T2-T25, lacznie z eventowymi i Celestial).",
       "market": "`/market list|buy|view|cancel` - obsluga gieldy kart.",
       "trade": "`/trade user:<gracz> your_card:<id> their_card:<id>` - proponuje wymiane kart.",
       "top": "`/top [by]` - ranking wedlug monet, liczby kart lub najwyzszego tieru.",

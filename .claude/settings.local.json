@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --check src/commands/collection.js)",
+      "Bash(node --check src/commands/sellbulk.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('locales/en-US/translation.json'\\)\\);JSON.parse\\(require\\('fs'\\).readFileSync\\('locales/pl/translation.json'\\)\\);console.log\\('OK'\\)\")",
+      "Bash(node --check src/commands/help.js)",
+      "Bash(node --check src/commands/craft.js)",
+      "Bash(node --check src/services/craft.js)",
+      "Bash(node --check src/services/pack.js)",
+      "Bash(node -e \"const {getAllCraftRecipes}=require\\('./src/services/craft'\\);for \\(const r of getAllCraftRecipes\\(\\)\\) console.log\\('T'+r.targetTier+' '+r.targetTierName+' = '+r.sourceCount+'x T'+r.sourceTier+' + '+r.coinCost+' coins \\(target value '+r.targetBaseValue+'\\)'\\);\")",
+      "Bash(node --check src/scripts/backup.js)",
+      "Bash(node src/scripts/backup.js --help)",
+      "Bash(node -e \"const {getAllCraftRecipes}=require\\('./src/services/craft'\\);for \\(const r of getAllCraftRecipes\\(\\)\\) console.log\\('T'+r.targetTier+' '+r.targetTierName.padEnd\\(15\\)+' = '+r.sourceCount+'x T'+r.sourceTier+' '+r.sourceTierName.padEnd\\(15\\)+' + '+r.coinCost+' coins'\\);\")",
+      "Bash(node -e ' *)",
+      "Bash(node --check src/services/shop.js)",
+      "Bash(node --check src/commands/odds.js)",
+      "Bash(node --check src/commands/shop.js)"
+    ]
+  }
+}
