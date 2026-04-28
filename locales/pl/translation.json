@@ -47,7 +47,13 @@
     "best_card": "Najlepsza karta:",
     "top_pulls": "Top pulli:",
     "tier_breakdown": "Rozklad tierow:",
-    "only_owner": "Tylko osoba otwierajaca paczke moze przewijac te karty."
+    "only_owner": "Tylko osoba otwierajaca paczke moze przewijac te karty.",
+    "sell_pack_button": "Sprzedaj zawartosc paczki",
+    "sell_pack_confirm_yes": "Sprzedaj",
+    "sell_pack_confirm_no": "Anuluj",
+    "sell_pack_confirm": "Sprzedac **{{count}}** kart z tej paczki za **{{value}}** monet?",
+    "sell_pack_success": "Sprzedano **{{count}}** kart za **{{value}}** monet.",
+    "sell_pack_none": "Zadne karty z paczki nie sa juz dostepne (sprzedane lub wystawione)."
   },
   "inventory": {
     "empty": "Twoje inventory jest puste. Otworz paczke przez `/open`!",
@@ -96,6 +102,7 @@
     "no_matches": "Zadne karty nie pasuja do wybranych filtrow (karty wystawione na gieldzie sa pomijane).",
     "filter_tier": "Tier: **{{tierName}}** (T{{tier}})",
     "filter_user": "Uzytkownik z karty: **{{username}}**",
+    "filter_all": "**WSZYSTKIE** twoje karty",
     "preview": "Zaraz sprzedasz **{{count}}** kart za **{{value}}** monet.\nFiltr: {{filter}}\n\nPodglad:",
     "preview_more": "... i wiecej kart.",
     "confirm_button": "Sprzedaj",
@@ -195,7 +202,7 @@
       "market": "4. Nadmiarowe karty mozesz sprzedac bezposrednio przez `/sell` albo wystawic przez `/market list`."
     },
     "commands": {
-      "open": "`/open [pack] [amount]` - otwiera wybrana paczke; male serie maja slider, duze serie podsumowanie.",
+      "open": "`/open [pack] [amount]` - otwiera paczke (slider/podsumowanie); przycisk sprzedazy zawartosci.",
       "odds": "`/odds [pack]` - pokazuje szanse dropu dla wybranej paczki.",
       "inventory": "`/inventory [page]` - pokazuje twoje karty z podzialem na strony.",
       "collection": "`/collection user:<gracz>` - wystawa kart: podglad jak karta gracza wyglada na kazdym tierze.",
@@ -203,7 +210,7 @@
       "balance": "`/balance` - pokazuje monety, paczki i czas do kolejnej paczki.",
       "shop": "`/shop view` i `/shop buy` - sklep z lepszymi paczkami za monety.",
       "sell": "`/sell id:<id>` - sprzedaje karte za wartosc bazowa.",
-      "sellbulk": "`/sellbulk [tier] [user]` - masowa sprzedaz pasujacych kart (filtry mozna laczyc).",
+      "sellbulk": "`/sellbulk [tier] [user] [all]` - masowa sprzedaz; `all:true` = wszystko (confirm).",
       "craft": "`/craft recipes` i `/craft do user:<gracz> tier:<n>` - ulepsz N kart tego samego gracza + monety na karte wyzszego tieru tego gracza (T2-T25, lacznie z eventowymi i Celestial).",
       "market": "`/market list|buy|view|cancel` - obsluga gieldy kart.",
       "trade": "`/trade user:<gracz> your_card:<id> their_card:<id>` - proponuje wymiane kart.",

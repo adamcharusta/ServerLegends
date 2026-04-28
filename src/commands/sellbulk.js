@@ -27,15 +27,21 @@ module.exports = {
       o.setName('user')
         .setDescription('Sell only cards depicting this user')
         .setDescriptionLocalizations({ pl: 'Sprzedaj tylko karty z tym uzytkownikiem' })
+    )
+    .addBooleanOption(o =>
+      o.setName('all')
+        .setDescription('Sell ALL your cards (overrides other filters)')
+        .setDescriptionLocalizations({ pl: 'Sprzedaj WSZYSTKIE swoje karty (nadpisuje pozostale filtry)' })
     ),
 
   async execute(interaction) {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const t = getT(interaction.locale);
-    const tier = interaction.options.getInteger('tier');
-    const targetUser = interaction.options.getUser('user');
+    const sellAll = interaction.options.getBoolean('all') === true;
+    const tier = sellAll ? null : interaction.options.getInteger('tier');
+    const targetUser = sellAll ? null : interaction.options.getUser('user');
 
-    if (tier === null && !targetUser) {
+    if (!sellAll && tier === null && !targetUser) {
       return interaction.editReply({ content: t('sellbulk.no_filter') });
     }
     if (targetUser?.bot) {
@@ -63,8 +69,12 @@ module.exports = {
 
     const totalValue = rows.reduce((sum, row) => sum + getTierData(row.rarity).baseValue, 0);
     const filterParts = [];
-    if (tierData) filterParts.push(t('sellbulk.filter_tier', { tierName: tierData.name, tier: tierData.tier }));
-    if (targetUser) filterParts.push(t('sellbulk.filter_user', { username: targetUser.username }));
+    if (sellAll) {
+      filterParts.push(t('sellbulk.filter_all'));
+    } else {
+      if (tierData) filterParts.push(t('sellbulk.filter_tier', { tierName: tierData.name, tier: tierData.tier }));
+      if (targetUser) filterParts.push(t('sellbulk.filter_user', { username: targetUser.username }));
+    }
     const filterText = filterParts.join(' • ');
 
     const previewLines = rows.slice(0, PREVIEW_LIMIT).map(row => {

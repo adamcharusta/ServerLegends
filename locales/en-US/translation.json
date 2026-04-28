@@ -47,7 +47,13 @@
     "best_card": "Best card:",
     "top_pulls": "Top pulls:",
     "tier_breakdown": "Tier breakdown:",
-    "only_owner": "Only the person opening the pack can browse these cards."
+    "only_owner": "Only the person opening the pack can browse these cards.",
+    "sell_pack_button": "Sell pack haul",
+    "sell_pack_confirm_yes": "Sell",
+    "sell_pack_confirm_no": "Cancel",
+    "sell_pack_confirm": "Sell **{{count}}** cards from this pack for **{{value}}** coins?",
+    "sell_pack_success": "Sold **{{count}}** cards for **{{value}}** coins.",
+    "sell_pack_none": "None of the pack cards are still available (sold or listed)."
   },
   "inventory": {
     "empty": "Your inventory is empty. Open a pack with `/open`!",
@@ -96,6 +102,7 @@
     "no_matches": "No cards match the selected filters (cards listed on the market are excluded).",
     "filter_tier": "Tier: **{{tierName}}** (T{{tier}})",
     "filter_user": "Card user: **{{username}}**",
+    "filter_all": "**ALL** your cards",
     "preview": "You are about to sell **{{count}}** cards for **{{value}}** coins.\nFilter: {{filter}}\n\nPreview:",
     "preview_more": "... and more cards.",
     "confirm_button": "Sell",
@@ -195,7 +202,7 @@
       "market": "4. Extra cards can be sold directly with `/sell` or listed on the market with `/market list`."
     },
     "commands": {
-      "open": "`/open [pack] [amount]` - opens a selected pack; small pulls use a slider, large pulls show a summary.",
+      "open": "`/open [pack] [amount]` - opens a pack (slider for few, summary for many); sell-all button after.",
       "odds": "`/odds [pack]` - shows the drop odds for a selected pack.",
       "inventory": "`/inventory [page]` - shows your cards in pages.",
       "collection": "`/collection user:<player>` - card showcase: previews how a player's card looks at every tier.",
@@ -203,7 +210,7 @@
       "balance": "`/balance` - shows your coins, packs, and time until the next pack.",
       "shop": "`/shop view` and `/shop buy` - better packs for coins.",
       "sell": "`/sell id:<id>` - sells a card for its base value.",
-      "sellbulk": "`/sellbulk [tier] [user]` - mass-sells matching cards (filters can be combined).",
+      "sellbulk": "`/sellbulk [tier] [user] [all]` - mass-sells matching cards; `all:true` sells everything. Always confirms.",
       "craft": "`/craft recipes` and `/craft do user:<player> tier:<n>` - upgrade N same-player cards + coins into a higher-tier card of that player (T2-T25, includes event and Celestial).",
       "market": "`/market list|buy|view|cancel` - card market actions.",
       "trade": "`/trade user:<player> your_card:<id> their_card:<id>` - proposes a card trade.",

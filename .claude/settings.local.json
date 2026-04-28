@@ -15,7 +15,13 @@
       "Bash(node -e ' *)",
       "Bash(node --check src/services/shop.js)",
       "Bash(node --check src/commands/odds.js)",
-      "Bash(node --check src/commands/shop.js)"
+      "Bash(node --check src/commands/shop.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('locales/en-US/translation.json','utf8'\\)\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('locales/pl/translation.json','utf8'\\)\\); console.log\\('OK'\\)\")",
+      "Bash(node -e \"require\\('./src/commands/sellbulk.js'\\); console.log\\('sellbulk OK'\\)\")",
+      "Bash(ssh -o ConnectTimeout=10 bosman 'echo connected; hostname; pwd')",
+      "Bash(ssh bosman *)",
+      "Bash(node -e \"require\\('./src/commands/open.js'\\); console.log\\('open OK'\\)\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('locales/en-US/translation.json','utf8'\\)\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('locales/pl/translation.json','utf8'\\)\\); require\\('./src/commands/open.js'\\); console.log\\('all OK'\\)\")"
     ]
   }
 }

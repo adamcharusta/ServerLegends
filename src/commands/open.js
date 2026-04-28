@@ -10,6 +10,8 @@ const { openSelectedPack } = require('../services/pack');
 const { generateCard } = require('../services/card');
 const { getT } = require('../services/i18n');
 const { PACK_TYPES } = require('../services/shop');
+const pool = require('../db/pool');
+const { getTierData } = require('../services/rarity');
 const en = require('../../locales/en-US/translation.json');
 const pl = require('../../locales/pl/translation.json');
 
@@ -34,6 +36,59 @@ function buildNavigationRow(t, currentIndex, totalCards, baseId) {
       .setStyle(ButtonStyle.Primary)
       .setDisabled(currentIndex === totalCards - 1)
   );
+}
+
+function buildSellRow(t, baseId) {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`${baseId}:sell`)
+      .setLabel(t('open.sell_pack_button'))
+      .setStyle(ButtonStyle.Danger)
+  );
+}
+
+function buildSellConfirmRow(t, baseId) {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`${baseId}:sell:confirm`)
+      .setLabel(t('open.sell_pack_confirm_yes'))
+      .setStyle(ButtonStyle.Danger),
+    new ButtonBuilder()
+      .setCustomId(`${baseId}:sell:cancel`)
+      .setLabel(t('open.sell_pack_confirm_no'))
+      .setStyle(ButtonStyle.Secondary)
+  );
+}
+
+async function sellPackCards(userId, guildId, cardIds) {
+  if (!cardIds.length) return { soldCount: 0, earned: 0 };
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const deleteRes = await client.query(
+      `DELETE FROM inventory
+        WHERE owner_id = $1 AND guild_id = $2
+          AND id = ANY($3::int[])
+          AND NOT EXISTS (SELECT 1 FROM market_listings m WHERE m.inventory_id = inventory.id)
+        RETURNING rarity`,
+      [userId, guildId, cardIds]
+    );
+    const soldCount = deleteRes.rows.length;
+    const earned = deleteRes.rows.reduce((sum, r) => sum + getTierData(r.rarity).baseValue, 0);
+    if (soldCount > 0) {
+      await client.query(
+        `UPDATE users SET balance = balance + $1 WHERE user_id = $2 AND guild_id = $3`,
+        [earned, userId, guildId]
+      );
+    }
+    await client.query('COMMIT');
+    return { soldCount, earned };
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 function buildSummary(t, cards) {
@@ -186,6 +241,10 @@ module.exports = {
       return interaction.editReply(t('open.no_members'));
     }
 
+    const baseId = `open:${interaction.id}`;
+    const cardIds = result.pulls.map(pull => pull.cardId);
+    const totalSellValue = result.pulls.reduce((sum, pull) => sum + pull.tierInfo.baseValue, 0);
+
     if (result.packAmount > MAX_SLIDER_PACKS) {
       const bestCard = [...result.pulls].sort((left, right) =>
         right.tierInfo.tier - left.tierInfo.tier || left.cardId - right.cardId
@@ -199,15 +258,67 @@ module.exports = {
         bestCard.tierInfo.tier
       );
 
-      return interaction.editReply({
-        content: buildBulkContent(t, result.pulls, result.pack, result.packAmount, result.packsLeft),
+      const baseContent = buildBulkContent(t, result.pulls, result.pack, result.packAmount, result.packsLeft);
+
+      const message = await interaction.editReply({
+        content: baseContent,
         files: [
           new AttachmentBuilder(bestCardBuffer, {
             name: 'best-card.png',
           }),
         ],
-        components: [],
+        components: [buildSellRow(t, baseId)],
+        fetchReply: true,
       });
+
+      const collector = message.createMessageComponentCollector({
+        time: 5 * 60 * 1000,
+      });
+
+      collector.on('collect', async buttonInteraction => {
+        if (!buttonInteraction.customId.startsWith(baseId)) return;
+        if (buttonInteraction.user.id !== interaction.user.id) {
+          await buttonInteraction.reply({
+            content: t('open.only_owner'),
+            flags: MessageFlags.Ephemeral,
+          });
+          return;
+        }
+
+        if (buttonInteraction.customId === `${baseId}:sell`) {
+          await buttonInteraction.update({
+            content: `${baseContent}\n\n${t('open.sell_pack_confirm', { count: cardIds.length, value: totalSellValue })}`,
+            components: [buildSellConfirmRow(t, baseId)],
+          });
+          return;
+        }
+
+        if (buttonInteraction.customId === `${baseId}:sell:cancel`) {
+          await buttonInteraction.update({
+            content: baseContent,
+            components: [buildSellRow(t, baseId)],
+          });
+          return;
+        }
+
+        if (buttonInteraction.customId === `${baseId}:sell:confirm`) {
+          const { soldCount, earned } = await sellPackCards(interaction.user.id, interaction.guildId, cardIds);
+          const successText = soldCount === 0
+            ? t('open.sell_pack_none')
+            : t('open.sell_pack_success', { count: soldCount, value: earned });
+          await buttonInteraction.update({
+            content: `${baseContent}\n\n${successText}`,
+            components: [],
+          });
+          collector.stop();
+        }
+      });
+
+      collector.on('end', async () => {
+        await interaction.editReply({ components: [] }).catch(() => {});
+      });
+
+      return;
     }
 
     const renderedCards = await Promise.all(
@@ -223,25 +334,37 @@ module.exports = {
       }))
     );
 
-    const baseId = `open:${interaction.id}`;
     let currentIndex = 0;
+    let confirmMode = false;
 
-    const buildReplyPayload = () => ({
-      content: buildPackContent(
+    const buildReplyPayload = () => {
+      const baseContent = buildPackContent(
         t,
         renderedCards,
         currentIndex,
         result.pack,
         result.packAmount,
         result.packsLeft
-      ),
-      files: [
-        new AttachmentBuilder(renderedCards[currentIndex].buffer, {
-          name: `card-${currentIndex + 1}.png`,
-        }),
-      ],
-      components: [buildNavigationRow(t, currentIndex, renderedCards.length, baseId)],
-    });
+      );
+      const file = new AttachmentBuilder(renderedCards[currentIndex].buffer, {
+        name: `card-${currentIndex + 1}.png`,
+      });
+      if (confirmMode) {
+        return {
+          content: `${baseContent}\n\n${t('open.sell_pack_confirm', { count: cardIds.length, value: totalSellValue })}`,
+          files: [file],
+          components: [buildSellConfirmRow(t, baseId)],
+        };
+      }
+      return {
+        content: baseContent,
+        files: [file],
+        components: [
+          buildNavigationRow(t, currentIndex, renderedCards.length, baseId),
+          buildSellRow(t, baseId),
+        ],
+      };
+    };
 
     const message = await interaction.editReply({
       ...buildReplyPayload(),
@@ -263,15 +386,54 @@ module.exports = {
         return;
       }
 
-      if (buttonInteraction.customId.endsWith(':prev') && currentIndex > 0) {
+      if (buttonInteraction.customId === `${baseId}:prev` && currentIndex > 0) {
         currentIndex -= 1;
+        await buttonInteraction.update(buildReplyPayload());
+        return;
       }
 
-      if (buttonInteraction.customId.endsWith(':next') && currentIndex < renderedCards.length - 1) {
+      if (buttonInteraction.customId === `${baseId}:next` && currentIndex < renderedCards.length - 1) {
         currentIndex += 1;
+        await buttonInteraction.update(buildReplyPayload());
+        return;
       }
 
-      await buttonInteraction.update(buildReplyPayload());
+      if (buttonInteraction.customId === `${baseId}:sell`) {
+        confirmMode = true;
+        await buttonInteraction.update(buildReplyPayload());
+        return;
+      }
+
+      if (buttonInteraction.customId === `${baseId}:sell:cancel`) {
+        confirmMode = false;
+        await buttonInteraction.update(buildReplyPayload());
+        return;
+      }
+
+      if (buttonInteraction.customId === `${baseId}:sell:confirm`) {
+        const { soldCount, earned } = await sellPackCards(interaction.user.id, interaction.guildId, cardIds);
+        const baseContent = buildPackContent(
+          t,
+          renderedCards,
+          currentIndex,
+          result.pack,
+          result.packAmount,
+          result.packsLeft
+        );
+        const successText = soldCount === 0
+          ? t('open.sell_pack_none')
+          : t('open.sell_pack_success', { count: soldCount, value: earned });
+        await buttonInteraction.update({
+          content: `${baseContent}\n\n${successText}`,
+          files: [
+            new AttachmentBuilder(renderedCards[currentIndex].buffer, {
+              name: `card-${currentIndex + 1}.png`,
+            }),
+          ],
+          components: [],
+        });
+        collector.stop();
+      }
     });
 
     collector.on('end', async () => {
